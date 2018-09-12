@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
-import { getToken } from '@/utils/auth'
+import { getToken, getCookie } from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
@@ -14,8 +14,8 @@ service.interceptors.request.use(config => {
   if (store.getters.token) {
     config.headers['accessToken'] = getToken()
     config.headers['accessSeq'] = new Date().getTime()
-    config.headers['customerAccountId'] = 2
-    config.headers['customerId'] = 0
+    config.headers['customerAccountId'] = getCookie('customerAccountId')
+    config.headers['customerId'] = getCookie('customerId')
   }
   return config
 }, error => {

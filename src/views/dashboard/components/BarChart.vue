@@ -43,6 +43,7 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
+      // this.chart = echarts.init(this.$el)
 
       this.chart.setOption({
         tooltip: {
@@ -62,7 +63,7 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
             axisTick: {
               alignWithLabel: true
             }

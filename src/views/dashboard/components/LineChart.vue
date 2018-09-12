@@ -26,8 +26,10 @@ export default {
       default: true
     },
     chartData: {
-      type: String,
-      default: '350px'
+      type: Object,
+      default: function() {
+        return { }
+      }
     }
   },
   data() {
@@ -66,7 +68,7 @@ export default {
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
         xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
           boundaryGap: false,
           axisTick: {
             show: false
@@ -92,11 +94,11 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ['注册用户数', '激活用户数']
         },
         series: [
           {
-            name: 'expected',
+            name: '注册用户数',
             itemStyle: {
               normal: {
                 color: '#FF005A',
@@ -113,7 +115,7 @@ export default {
             animationEasing: 'cubicInOut'
           },
           {
-            name: 'actual',
+            name: '激活用户数',
             smooth: true,
             type: 'line',
             itemStyle: {
@@ -137,6 +139,7 @@ export default {
     },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
+      // this.chart = echarts.init(this.$el)
       this.setOptions(this.chartData)
     }
   }

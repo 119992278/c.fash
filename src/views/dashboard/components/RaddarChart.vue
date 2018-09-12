@@ -43,6 +43,7 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
+      // this.chart = echarts.init(this.$el)
 
       this.chart.setOption({
         tooltip: {
@@ -78,7 +79,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Allocated Budget', 'Expected Spending', 'Actual Spending']
+          data: ['智能设备', '手环', '腰带']
         },
         series: [
           {
@@ -96,15 +97,15 @@ export default {
             data: [
               {
                 value: [5000, 7000, 12000, 11000, 15000, 14000],
-                name: 'Allocated Budget'
+                name: '智能设备'
               },
               {
                 value: [4000, 9000, 15000, 15000, 13000, 11000],
-                name: 'Expected Spending'
+                name: '手环'
               },
               {
                 value: [5500, 11000, 12000, 15000, 12000, 12000],
-                name: 'Actual Spending'
+                name: '腰带'
               }
             ],
             animationDuration: animationDuration

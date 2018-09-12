@@ -1,0 +1,313 @@
+<template>
+  <div class="app-container">
+    <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleDialog">新增</el-button>
+    <el-input v-model="searchVal" style="width: 200px;" class="filter-item" placeholder="请输入需要查询的账户" @keyup.native.enter="search"/>
+    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="search()">search</el-button>
+    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" center modal show-close top="1vh" width="70%">
+      <el-form ref="dataForm" :model="temp" :rules="rules">
+        <el-form-item :label-width="formLabelWidth" label="账号:" prop="customerAccount">
+          <el-input v-model="temp.customerAccount"/>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="密码:" prop="customerPassword" >
+          <el-input v-model="temp.customerPassword" type="password"/>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="公司地址:">
+          <el-input v-model="temp.customerAddress"/>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="联系方式:">
+          <el-input v-model="temp.customerContact"/>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="公司编码:">
+          <el-input v-model="temp.customerCode"/>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="公司名称:">
+          <el-input v-model="temp.customerName"/>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="邮箱:">
+          <el-input v-model="temp.customerEamil"/>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="联系人:">
+          <el-input v-model="temp.contactUser"/>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="账户类型:">
+          <el-radio-group v-model="temp.customerType">
+            <el-radio label="0">经销商</el-radio>
+            <el-radio label="1" disabled>开发者</el-radio>
+            <el-radio label="2">管理者</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="性别:">
+          <el-radio-group v-model="temp.sex">
+            <el-radio label="0">男</el-radio>
+            <el-radio label="1">女</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item v-if="temp.customerType=='2'" :label-width="formLabelWidth" label="超级管理员:">
+          <el-checkbox-group v-model="temp.authoList">
+            <el-checkbox label="1">账户管理</el-checkbox>
+            <el-checkbox label="4">固件管理</el-checkbox>
+            <el-checkbox label="3">App管理</el-checkbox>
+            <el-checkbox label="21">邮件模板</el-checkbox>
+            <el-checkbox label="2">意见反馈</el-checkbox>
+            <el-checkbox label="5">用户图表</el-checkbox>
+            <el-checkbox label="6">用户列表</el-checkbox>
+            <el-checkbox label="7">操作历史</el-checkbox>
+            <el-checkbox label="23">表盘管理</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item v-if="temp.customerType=='2'" :label-width="formLabelWidth" label="查看数据:">
+          <el-checkbox-group v-model="temp.authoList">
+            <el-checkbox label="8">查看用户数</el-checkbox>
+            <el-checkbox label="9">查看用户设备数量</el-checkbox>
+            <el-checkbox label="10">用户群体分析</el-checkbox>
+            <el-checkbox label="11">用户列表</el-checkbox>
+            <el-checkbox label="12">运动数据分析</el-checkbox>
+            <el-checkbox label="22">重置用户密码</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item v-if="temp.customerType=='2'" :label-width="formLabelWidth" label="推广服务:">
+          <el-checkbox-group v-model="temp.authoList">
+            <el-checkbox label="13">邮件推广</el-checkbox>
+            <el-checkbox label="14">短信及邮件推广</el-checkbox>
+            <el-checkbox label="15">APP消息推送</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item v-if="temp.customerType=='2'" :label-width="formLabelWidth" label="设置:">
+          <el-checkbox-group v-model="temp.authoList">
+            <el-checkbox label="16">APP设置</el-checkbox>
+            <el-checkbox label="17">固件设置</el-checkbox>
+            <el-checkbox label="18">常见问题设置</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <div class="dialog-footer" align="right">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <!-- <el-button type="primary" @click="createData">新增会员</el-button> -->
+          <el-button v-if="dialogStatus=='新增会员'" type="primary" @click="createData">新增</el-button>
+          <el-button v-else type="primary" @click="updateData">编辑</el-button>
+        </div>
+      </el-form>
+    </el-dialog>
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      :row-class-name="tableRowClassName"
+      element-loading-text="Loading"
+      border
+      fit
+      highlight-current-row>
+      <el-table-column align="center" label="ID" width="95" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.$index + 1 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="账号" min-width="130" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.customerAccount }}
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="类型" width="110" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.customerType | customerTypeFilter }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="公司名称1" min-width="130" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.customerName }}
+        </template>
+      </el-table-column>
+      <el-table-column label="公司编号" width="110" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.customerCode }}
+        </template>
+      </el-table-column>
+      <el-table-column label="联系人" width="110" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.contactUser }}
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" min-width="160" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.insertTime }}
+        </template>
+      </el-table-column> -->
+      <el-table-column label="状态" width="110" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.auditStatus | auditStatusFilter }}
+        </template>
+      </el-table-column>
+      <el-table-column label="App" min-width="180" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.appName }}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" min-width="180" align="center">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleUpdate(scope.row)">编辑</el-button>
+          <el-button v-if="scope.row.status!='draft'" size="mini" type="primary" @click="handleModifyStatus(scope.row,'draft')">授权</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination :current-page="listQuery.sEcho" :page-sizes="[10,20,30,40,50,100]" :page-size="listQuery.limit" :total="totalQuantity" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+  </div>
+</template>
+
+<script>
+import { Message, MessageBox } from 'element-ui'
+import { getAccountList, addDealer, editDealer } from '@/api/dealer'
+import { validNoEmpty } from '@/utils/validate'
+export default {
+  filters: {
+    auditStatusFilter(status) {
+      const statusMap = { 0: '审核通过' }
+      return statusMap[status]
+    },
+    customerTypeFilter(status) {
+      const statusMap = { 0: '经销商', 1: '开发者', 2: '管理者' }
+      return statusMap[status]
+    }
+  },
+  // 引入组件
+  components: {
+  },
+  data() {
+    return {
+      formLabelWidth: '130px',
+      list: null,
+      listLoading: true,
+      searchVal: '',
+      totalQuantity: 0,
+      dialogFormVisible: false,
+      dialogStatus: '新增账户',
+      temp: {
+        addType: '0',
+        auditStatus: 0,
+        isActivity: 1,
+        customerEamil: '', // 119992278@qq.com
+        contactUser: '', // 联系人
+        customerName: '', // 公司中文名称
+        customerContact: '', // 联系方式
+        customerCode: '', // 公司编码
+        customerAddress: '', // 公司地址
+        customerPassword: '', // 888888
+        customerAccount: '', // 13888888888
+        customerType: '2',
+        sex: '0',
+        authoList: []
+      },
+      listQuery: {
+        customerAccount: '',
+        limit: 10,
+        sEcho: 1,
+        sortCol: 'customerAccountId',
+        sortDir: 'asc',
+        start: 0
+      },
+      rules: {
+        contactUser: validNoEmpty,
+        customerPassword: validNoEmpty
+      }
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      getAccountList(this.listQuery).then(response => {
+        this.listLoading = false
+        this.list = response.rows
+        this.totalQuantity = response.total
+      })
+    },
+    search(name) {
+      this.listQuery.customerAccount = this.searchVal
+      this.fetchData()
+    },
+    tableRowClassName({ row, rowIndex }) {
+      if (rowIndex % 2 === 0) {
+        return 'warning-row'
+      } else {
+        return 'success-row'
+      }
+    },
+    handleCurrentChange: function(page) {
+      console.log('page1=' + page)
+      if (this.listQuery.sEcho !== page) {
+        this.listQuery.sEcho = page
+        this.listQuery.start = page * 10 - 10
+      }
+      this.fetchData()
+    },
+    handleSizeChange: function(page) {
+      this.listQuery.limit = page
+      this.listQuery.start = 0
+      this.fetchData()
+    },
+    handleDialog: function(params) {
+      this.dialogStatus = '新增会员'
+      this.temp.customerType = '0'
+      this.temp.sex = '0'
+      this.temp.authoList = []
+      this.dialogFormVisible = true
+    },
+    handleUpdate: function(row) {
+      this.dialogFormVisible = true
+      // this.temp = Object.assign({}, row)
+      this.temp.customerType = String(row.customerType)
+      console.log(JSON.stringify(row))
+      // this.temp.sex = '0'
+      // this.temp.authoList = []
+      // this.dialogStatus = this.temp.contactUser
+      // this.$nextTick(() => {
+      //   this.$refs['dataForm'].clearValidate()
+      // })
+    },
+    createData: function() {
+      this.temp.authotity = this.temp.authoList.join(',')
+      delete this.temp.authoList
+      addDealer(this.temp).then(response => {
+        this.dialogFormVisible = false
+        Message({
+          title: '成功',
+          message: '创建成功',
+          type: 'success',
+          duration: 2 * 1000
+        })
+      })
+    },
+    updateData: function() {
+      this.temp.authotity = this.temp.authoList.join(',')
+      delete this.temp.authoList
+      editDealer(this.temp).then(response => {
+        this.dialogFormVisible = false
+        Message({
+          title: '成功',
+          message: '创建成功',
+          type: 'success',
+          duration: 2 * 1000
+        })
+      })
+    }
+  }
+}
+</script>
+
+<style>
+.el-table .warning-row {
+  background: oldlace;
+}
+
+.el-table .success-row {
+  background: #f0f9eb;
+}
+.el-pagination {
+  text-align: center;
+  margin-top: 2em;
+}
+.el-form-item__content{}
+.el-form-item{margin-bottom: 18px}
+.el-table td, .el-table th{
+  padding:16px 0
+}
+</style>

@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
-
+import VueParticles from 'vue-particles'
 import App from './App'
 import router from './router'
 import store from './store'
@@ -16,7 +16,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 Vue.use(ElementUI, { locale })
-
+Vue.use(VueParticles)
 Vue.config.productionTip = false
 
 new Vue({

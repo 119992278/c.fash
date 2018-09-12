@@ -1,5 +1,5 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  BASE_API: '"https://c.fashioncomm.com"',
+  BASE_API: '"http://testc.appscomm.cn"',
 }

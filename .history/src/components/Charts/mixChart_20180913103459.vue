@@ -1,0 +1,86 @@
+<template>
+  <div :class="className" :id="id" :style="{height:height,width:width}"/>
+</template>
+
+<script>
+import echarts from 'echarts'
+import resize from './mixins/resize'
+
+export default {
+  mixins: [resize],
+  props: {
+    className: {
+      type: String,
+      default: 'chart'
+    },
+    id: {
+      type: String,
+      default: 'chart'
+    },
+    width: {
+      type: String,
+      default: '100%'
+    },
+    height: {
+      type: String,
+      default: '100%'
+    },
+    ydata: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
+    title: {
+      type: String,
+      default: '标题'
+    },
+    xdata: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    }},
+  data() {
+    return {
+      chart: null
+    }
+  },
+  watch: {
+    ydata: function(val) {
+      this.initChart()
+    },
+    xdata: function(val) {
+      this.initChart()
+    }
+  },
+  mounted() {
+    this.initChart()
+  },
+  beforeDestroy() {
+    if (!this.chart) {
+      return
+    }
+    this.chart.dispose()
+    this.chart = null
+  },
+  methods: {
+    initChart() {
+      this.chart = echarts.init(document.getElementById(this.id))
+      this.chart.setOption({
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [{
+          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          type: 'line'
+        }]
+      })
+    }
+  }
+}
+</script>

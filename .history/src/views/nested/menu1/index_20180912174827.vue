@@ -1,7 +1,0 @@
-<template >
-  <div style="width:100%;height:100%">
-    <el-alert :closable="false" title="menu 1">
-      <router-view />
-    </el-alert>
-  </div>
-</template>

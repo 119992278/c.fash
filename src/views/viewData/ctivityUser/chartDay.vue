@@ -58,13 +58,5 @@ export default {
 </script>
 
 <style scoped>
-.chart-container{
-  position: relative;
-  text-align: center;
-  width: 100%;
-  padding:1%;
-  height: calc(100vh - 84px);
-
-}
 </style>
 

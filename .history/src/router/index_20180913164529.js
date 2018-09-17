@@ -37,9 +37,9 @@ export const constantRouterMap = [
     children: [
       {
         path: 'index',
-        name: '图表展示',
+        name: '乐源云',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: '图表展示', icon: 'dashboard' }
+        meta: { title: '乐源云', icon: 'dashboard' }
       }
     ]
   },

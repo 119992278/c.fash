@@ -9,17 +9,15 @@
           <el-input v-model="temp.subject"/>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="App名字:">
-          <!-- <el-input v-model="temp.appName"/> -->
           <el-select v-model="temp.appName" filterable placeholder="请选择" @change="handleCheckedCitiesChange">
             <el-option v-for="(item,index) in appList" :key="index.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="邮件标识:">
-          <!-- <el-input v-model="temp.templateType"/> -->
           <el-radio-group v-model="temp.templateType">
-            <el-radio label="111">新用户注册</el-radio>
-            <el-radio label="0">忘记密码</el-radio>
-            <el-radio label="1">验证码</el-radio>
+            <el-radio label="111">忘记密码</el-radio>
+            <el-radio label="0">新用户注册</el-radio>
+            <el-radio label="3">验证码</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="语言:">
@@ -41,10 +39,10 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="更新说明:" prop="updateMessage">
-          <el-tag>用户名或账户号$userName</el-tag>
-          <el-tag>用户密码:$userPassword</el-tag>
-          <el-tag>验证码:$random</el-tag>
-          <el-tag>邮箱:$userMail</el-tag>
+          <el-tag>用户名或账户号: $userName</el-tag>
+          <el-tag>用户密码: $userPassword</el-tag>
+          <el-tag>验证码: $random</el-tag>
+          <el-tag>邮箱: $userMail</el-tag>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="支持模式">
           <el-radio-group v-model="temp.isNew">
@@ -57,10 +55,7 @@
             ref="myQuillEditor"
             v-model="temp.template"
             :options="editorOption"
-            height="400"
-            @blur="onEditorBlur($event)"
-            @focus="onEditorFocus($event)"
-            @change="onEditorChange($event)"/>
+          />
         </el-form-item>
         <div class="dialog-footer" align="right">
           <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -76,12 +71,12 @@
       border
       fit
       highlight-current-row>
-      <el-table-column align="center" label="ID" width="95" show-overflow-tooltip>
+      <el-table-column label="模板编号" min-width="100" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          {{ scope.$index + 1 }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="App名称" min-width="160" align="center" show-overflow-tooltip>
+      <el-table-column label="App名称" min-width="120" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.appName }}</span>
         </template>
@@ -91,31 +86,31 @@
           <span>{{ scope.row.templateType | statusStamp }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="语言" min-width="160" align="let" show-overflow-tooltip>
+      <el-table-column label="语言" min-width="160" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.language | languangeStamp }}
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" min-width="160" align="let" show-overflow-tooltip>
+      <el-table-column label="支持模式" min-width="100" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.isNew | isNewStamp }}
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" min-width="100" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.status | statusStamp2 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="更新时间" min-width="160" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.updateTime | momentStamp }}
         </template>
       </el-table-column>
-      <!-- <el-table-column label="最后修改人" min-width="160" align="let" show-overflow-tooltip>
+      <el-table-column label="最后修改人" min-width="160" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          {{ scope.row.versionMessage }}
+          {{ scope.row.operator }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" min-width="160" align="left" show-overflow-tooltip>
-        <template slot-scope="scope">
-          {{ scope.row.currentVersion }}
-        </template>
-      </el-table-column>
-      <el-table-column label="模板编号" min-width="160" align="left" show-overflow-tooltip>
-        <template slot-scope="scope">
-          {{ scope.row.currentVersion }}
-        </template>
-      </el-table-column> -->
       <el-table-column label="操作" min-width="180" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -139,8 +134,16 @@ export default {
     momentStamp(time) {
       return momentStampFormat(time)
     },
+    isNewStamp(status) {
+      const statusMap = { 0: '新模式', 1: '旧模式' }
+      return statusMap[status]
+    },
     statusStamp(status) {
       const statusMap = { 0: '新用户注册', 111: '忘记密码', 3: '验证码' }
+      return statusMap[status]
+    },
+    statusStamp2(status) {
+      const statusMap = { 0: '停用', 1: '使用' }
       return statusMap[status]
     },
     languangeStamp(status) {
@@ -176,13 +179,13 @@ export default {
       temp: {
         appId: '',
         appName: '',
-        isNew: '',
+        isNew: '1',
         language: '',
         operator: null,
         status: '',
         subject: '',
         template: '',
-        templateType: ''
+        templateType: '3'
       },
       listQuery: {
         authority2: this.$store.state.user.authority.authority2.join(','),
@@ -212,6 +215,7 @@ export default {
       const _this = this
       if (val === false) {
         this.$refs['dataForm'].resetFields()
+        this.resetTemp()
       } else {
         getAPPList({ limit: 1000, start: 0 }).then(response => {
           const _tempArr = []
@@ -224,18 +228,16 @@ export default {
   },
   created() {
     this.fetchData()
-    // const bm = this.$refs.tinymce.editor.selection.getBookmark();
-    // console.log(bm);
   },
   methods: {
     handleCheckedCitiesChange: function(val) {
-      console.log(val)
-    },
-    onEditorBlur() { // 失去焦点事件
-    },
-    onEditorFocus() { // 获得焦点事件
-    },
-    onEditorChange() { // 内容改变事件
+      const _this = this
+      this.appList.map(function(value1, index, arr) {
+        if (value1.value === String(val)) {
+          _this.temp.appName = value1.label
+          _this.temp.appId = value1.value
+        }
+      })
     },
     fetchData() {
       this.listLoading = true
@@ -276,6 +278,7 @@ export default {
         this.temp.status = String(this.temp.status)
         this.temp.isNew = String(this.temp.isNew)
         this.temp.template = this.temp.templateContent
+        console.log(this.temp)
       })
     },
     createData: function() {
@@ -311,6 +314,19 @@ export default {
     },
     uploadhandleSuccess(file) {
       this.temp.updateUrl = process.env.BASE_API + file.msg
+    },
+    resetTemp() {
+      this.temp = {
+        appId: '',
+        appName: '',
+        isNew: '1',
+        language: '',
+        operator: null,
+        status: '',
+        subject: '',
+        template: '',
+        templateType: '3'
+      }
     }
   }
 }
@@ -336,4 +352,6 @@ export default {
       }
     }
   }
+  .ql-editor{height:250px}
+.el-tag{font-size:14px}
 </style>

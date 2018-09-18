@@ -78,7 +78,7 @@ export const constantRouterMap = [
       {
         path: 'tickling',
         name: '意见反馈',
-        component: () => import('@/views/errorPage/401'),
+        component: () => import('@/views/errorPage/404'),
         meta: { title: '意见反馈', icon: '' }
       },
       {

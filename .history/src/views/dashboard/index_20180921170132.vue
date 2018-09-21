@@ -87,9 +87,6 @@ export default {
         })
         this.lineChartBindData = _lineChartBindData
       })
-    },
-    handleSetLineChartUserData(type) {
-      // this.lineChartUserData = lineChartUserData[type]
     }
   }
 }

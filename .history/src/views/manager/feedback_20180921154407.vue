@@ -172,7 +172,7 @@ export default {
         opiNion: null,
         params: {
           startIndex: 0,
-          maxCount: 10
+          maxCount: 20
         },
         userInfoId: null
       },

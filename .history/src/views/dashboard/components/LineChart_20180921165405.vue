@@ -36,12 +36,6 @@ export default {
       default: function() {
         return []
       }
-    },
-    chartData2: {
-      type: Array,
-      default: function() {
-        return []
-      }
     }
   },
   data() {
@@ -50,15 +44,16 @@ export default {
     }
   },
   watch: {
-    chartData1: {
-      handler() {
-        this.chart.hideLoading()
-        this.setOptions()
-      }
-    },
+    // chartData1: {
+    //   deep: true,
+    //   handler() {
+    //     console.log(this.chartData1)
+    //     this.setOptions()
+    //   }
+    // },
     chartData2: {
       handler() {
-        this.chart.hideLoading()
+        console.log(this.chartData2)
         this.setOptions()
       }
     },
@@ -131,9 +126,9 @@ export default {
             name: '激活设备数',
             itemStyle: {
               normal: {
-                color: '#34BFA3',
+                color: '#FF005A',
                 lineStyle: {
-                  color: '#34BFA3',
+                  color: '#FF005A',
                   width: 2
                 }
               }
@@ -149,7 +144,6 @@ export default {
     },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-      this.chart.showLoading({ animation: true, text: '数据加载中..', color: '#1582F0', maskColor: 'rgba(255, 255, 255, 0.8)', textStyle: { fontSize: 50 }})
       this.setOptions()
     }
   }

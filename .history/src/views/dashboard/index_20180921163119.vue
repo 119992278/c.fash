@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-editor-container">
-    <PanelGroup @handleSetLineChartUserData="handleSetLineChartUserData"/>
-    <LineChart :xdata="xdata" :chart-data1="lineChartUserData" :chart-data2="lineChartBindData"/>
+    <PanelGroup @handleSetLineChartData="handleSetLineChartData"/>
+    <LineChart :xdata="xdata" :chart-data="lineChartData"/>
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="6">
         <PieChart/>
@@ -28,7 +28,7 @@ import SexChart from './components/SexChart'
 import BarChart from './components/BarChart'
 import dayjs from 'dayjs'
 import { getToken, getCookie } from '@/utils/auth'
-import { getdynamicDate, cleanCustomerId, sleep } from '@/utils/index'
+import { getdynamicDate, cleanCustomerId } from '@/utils/index'
 import { getCountRegUser, getCountBindUser } from '@/api/dealer'
 export default {
   name: 'DashboardAdmin',
@@ -42,8 +42,7 @@ export default {
   },
   data() {
     return {
-      lineChartUserData: [],
-      lineChartBindData: [],
+      lineChartData: [],
       tdata: new Date(),
       xdata: [],
       listQuery: {
@@ -60,36 +59,23 @@ export default {
   },
   mounted() {},
   methods: {
-    async fetchData() {
-      await getCountRegUser(this.listQuery).then(response => {
-        const _lineChartUserData = []
+    fetchData() {
+      getCountRegUser(this.listQuery).then(response => {
+        const _tempYdata = []
         response.rows.map(function(value, key, arr) {
-          _lineChartUserData[parseInt(value.unitFormat) - 1] = parseInt(value.number)
+          _tempYdata[parseInt(value.unitFormat) - 1] = parseInt(value.number)
         })
         this.xdata.map(function(value, key, arr) {
           const dayD = dayjs().format('D')
           if (key < dayD) {
-            _lineChartUserData[key] = _lineChartUserData[key] === undefined ? 0 : _lineChartUserData[key]
+            _tempYdata[key] = _tempYdata[key] === undefined ? 0 : _tempYdata[key]
           }
         })
-        this.lineChartUserData = _lineChartUserData
-      })
-      await getCountBindUser(this.listQuery).then(response => {
-        const _lineChartBindData = []
-        response.rows.map(function(value, key, arr) {
-          _lineChartBindData[parseInt(value.unitFormat) - 1] = parseInt(value.number)
-        })
-        this.xdata.map(function(value, key, arr) {
-          const dayD = dayjs().format('D')
-          if (key < dayD) {
-            _lineChartBindData[key] = _lineChartBindData[key] === undefined ? 0 : _lineChartBindData[key]
-          }
-        })
-        this.lineChartBindData = _lineChartBindData
+        this.lineChartData = _tempYdata
       })
     },
-    handleSetLineChartUserData(type) {
-      // this.lineChartUserData = lineChartUserData[type]
+    handleSetLineChartData(type) {
+      // this.lineChartData = lineChartData[type]
     }
   }
 }

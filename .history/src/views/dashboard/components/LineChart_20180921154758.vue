@@ -31,13 +31,7 @@ export default {
         return []
       }
     },
-    chartData1: {
-      type: Array,
-      default: function() {
-        return []
-      }
-    },
-    chartData2: {
+    chartData: {
       type: Array,
       default: function() {
         return []
@@ -50,20 +44,14 @@ export default {
     }
   },
   watch: {
-    chartData1: {
-      handler() {
-        this.chart.hideLoading()
-        this.setOptions()
+    chartData: {
+      deep: true,
+      handler(val) {
+        this.setOptions(val)
       }
     },
-    chartData2: {
-      handler() {
-        this.chart.hideLoading()
-        this.setOptions()
-      }
-    },
-    xdata: function() {
-      this.setOption()
+    xdata: function(val) {
+      this.setOption(val)
     }
   },
   mounted() {
@@ -78,7 +66,7 @@ export default {
     }
   },
   methods: {
-    setOptions() {
+    setOptions(ydata) {
       this.chart.setOption({
         xAxis: {
           data: this.xdata,
@@ -108,11 +96,11 @@ export default {
         },
         legend: {
           // show: false,
-          data: ['用户注册数', '激活设备数']
+          data: ['当天用户注册数']
         },
         series: [
           {
-            name: '用户注册数',
+            name: '当天用户注册数',
             itemStyle: {
               normal: {
                 color: '#3888fa',
@@ -124,23 +112,23 @@ export default {
             },
             smooth: true,
             type: 'line',
-            data: this.chartData1,
+            data: ydata,
             animationDuration: 2800,
             animationEasing: 'cubicInOut'
           }, {
-            name: '激活设备数',
+            name: '当天用户注册数',
             itemStyle: {
               normal: {
-                color: '#34BFA3',
+                color: '#3888fa',
                 lineStyle: {
-                  color: '#34BFA3',
+                  color: '#3888fa',
                   width: 2
                 }
               }
             },
             smooth: true,
             type: 'line',
-            data: this.chartData2,
+            data: ydata,
             animationDuration: 2800,
             animationEasing: 'cubicInOut'
           }
@@ -149,8 +137,7 @@ export default {
     },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-      this.chart.showLoading({ animation: true, text: '数据加载中..', color: '#1582F0', maskColor: 'rgba(255, 255, 255, 0.8)', textStyle: { fontSize: 50 }})
-      this.setOptions()
+      this.setOptions(this.chartData)
     }
   }
 }

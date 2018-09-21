@@ -51,14 +51,15 @@ export default {
   },
   watch: {
     chartData1: {
+      deep: true,
       handler() {
-        this.chart.hideLoading()
+        console.log(this.chartData1)
         this.setOptions()
       }
     },
     chartData2: {
       handler() {
-        this.chart.hideLoading()
+        console.log(this.chartData2)
         this.setOptions()
       }
     },
@@ -149,7 +150,13 @@ export default {
     },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-      this.chart.showLoading({ animation: true, text: '数据加载中..', color: '#1582F0', maskColor: 'rgba(255, 255, 255, 0.8)', textStyle: { fontSize: 50 }})
+      this.chart.showLoading({
+        animation: true,
+        text: '数据加载中..',
+        color: '#1582F0',
+        maskColor: 'rgba(255, 255, 255, 0.8)',
+        textStyle: { fontSize: 50 }
+      })
       this.setOptions()
     }
   }

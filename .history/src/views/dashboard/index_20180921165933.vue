@@ -74,6 +74,7 @@ export default {
         })
         this.lineChartUserData = _lineChartUserData
       })
+      sleep(2000)
       await getCountBindUser(this.listQuery).then(response => {
         const _lineChartBindData = []
         response.rows.map(function(value, key, arr) {

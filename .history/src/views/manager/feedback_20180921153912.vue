@@ -164,6 +164,11 @@ export default {
       searchVal: '',
       totalQuantity: 0,
       dialogFormVisible: false,
+      temp: {
+        imageUrl: '',
+        productId: '',
+        appChineseName: ''
+      },
       listQuery: {
         answerStauts: null,
         answerType: 0,
@@ -172,15 +177,34 @@ export default {
         opiNion: null,
         params: {
           startIndex: 0,
-          maxCount: 10
+          maxCount: 20
         },
         userInfoId: null
       },
       rules: {
+        productName: isvalidNoEmpty,
+        updateUrl: isvalidNoEmpty,
+        deviceVersion: isvalidNoEmpty,
+        productCode: isvalidNoEmpty
       }
     }
   },
   computed: {
+    myHeaders() {
+      return {
+        accessToken: getToken(),
+        customerAccountId: getCookie('customerAccountId'),
+        customerId: getCookie('customerId')
+      }
+    }
+  },
+  watch: {
+    dialogFormVisible: function(val) {
+      if (val === false) {
+        this.$refs['dataForm'].resetFields()
+        this.resetTemp()
+      }
+    }
   },
   created() {
     this.fetchData()
@@ -194,6 +218,17 @@ export default {
         this.totalQuantity = response.total
       })
     },
+    resetTemp() {
+      this.temp = {
+        imageUrl: '',
+        productId: '',
+        appChineseName: ''
+      }
+    },
+    search(name) {
+      this.listQuery.productName = this.searchVal
+      this.fetchData()
+    },
     handleCurrentChange: function(page) {
       if (this.listQuery.sEcho !== page) {
         this.listQuery.sEcho = page
@@ -205,6 +240,18 @@ export default {
       this.listQuery.limit = page
       this.listQuery.start = 0
       this.fetchData()
+    },
+    handleAdd: function(params) {
+      this.dialogStatus = '新增' + this.tempName
+      this.dialogFormVisible = true
+    },
+    handleUpdate: function(row) {
+      // this.dialogStatus = '编辑' + this.tempName
+      // getproductInfo(row.productId).then(response => {
+      //   this.dialogFormVisible = true
+      //   this.temp = Object.assign({}, response.data)
+      //   this.temp.deviceVersion = response.data.newVersion
+      // })
     },
     createData: function() {
       this.$refs['dataForm'].validate((valid) => {
@@ -221,7 +268,27 @@ export default {
         }
       })
     },
+    updateData: function() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          editProductInfo(this.temp).then(response => {
+            this.dialogFormVisible = false
+            Message({
+              title: '成功',
+              message: '修改成功',
+              type: 'success',
+              duration: 2 * 1000
+            })
+            this.fetchData()
+          })
+        }
+      })
+    },
+    uploadhandleSuccess(file) {
+      this.temp.updateUrl = process.env.BASE_API + file.msg
+    },
     handleTabClick(tab, event) {
+      console.log(JSON.stringify(tab))
       this.fetchData()
     },
     confirmEdit(row) {

@@ -28,7 +28,7 @@ import SexChart from './components/SexChart'
 import BarChart from './components/BarChart'
 import dayjs from 'dayjs'
 import { getToken, getCookie } from '@/utils/auth'
-import { getdynamicDate, cleanCustomerId, sleep } from '@/utils/index'
+import { getdynamicDate, cleanCustomerId } from '@/utils/index'
 import { getCountRegUser, getCountBindUser } from '@/api/dealer'
 export default {
   name: 'DashboardAdmin',

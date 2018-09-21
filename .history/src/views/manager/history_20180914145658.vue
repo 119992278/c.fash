@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { momentStampFormat, cleanCustomerId } from '@/utils/index'
+import { momentStampFormat } from '@/utils/index'
 import { Message, MessageBox } from 'element-ui'
 import { getHistoryList } from '@/api/dealer'
 import { isvalidNoEmpty } from '@/utils/validate'
@@ -63,7 +63,7 @@ export default {
       },
       listQuery: {
         accountId: '',
-        customerId: cleanCustomerId(getCookie('customerId')),
+        customerId: getCookie('customerId'),
         limit: 10,
         sEcho: 1,
         sortCol: '"operationTime"',

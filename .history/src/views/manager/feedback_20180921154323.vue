@@ -164,6 +164,11 @@ export default {
       searchVal: '',
       totalQuantity: 0,
       dialogFormVisible: false,
+      temp: {
+        imageUrl: '',
+        productId: '',
+        appChineseName: ''
+      },
       listQuery: {
         answerStauts: null,
         answerType: 0,
@@ -172,15 +177,34 @@ export default {
         opiNion: null,
         params: {
           startIndex: 0,
-          maxCount: 10
+          maxCount: 20
         },
         userInfoId: null
       },
       rules: {
+        productName: isvalidNoEmpty,
+        updateUrl: isvalidNoEmpty,
+        deviceVersion: isvalidNoEmpty,
+        productCode: isvalidNoEmpty
       }
     }
   },
   computed: {
+    myHeaders() {
+      return {
+        accessToken: getToken(),
+        customerAccountId: getCookie('customerAccountId'),
+        customerId: getCookie('customerId')
+      }
+    }
+  },
+  watch: {
+    dialogFormVisible: function(val) {
+      if (val === false) {
+        this.$refs['dataForm'].resetFields()
+        this.resetTemp()
+      }
+    }
   },
   created() {
     this.fetchData()

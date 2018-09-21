@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeName" type="border-card" @tab-click="handleTabClick">
-      <el-tab-pane label="全部" name="all">
+      <el-tab-pane label="私教卡" name="coach">
         <el-table
           v-loading="listLoading"
           :data="list"
@@ -29,90 +29,15 @@
               <span>{{ scope.row.opiNion }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="答复" min-width="80" align="left" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.feedBackAnswer | feedBackAnswerStatus }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="100" align="center">
-            <template slot-scope="scope">
-              <el-button v-if="scope.row.feedBackAnswer === null" size="mini" type="success" @click="scope.row.edit=!scope.row.edit">答复</el-button>
-              <el-button v-else size="mini" type="success" disabled>已答复</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination :current-page="listQuery.sEcho" :page-sizes="[10,20,30,40,50,100]" :page-size="listQuery.limit" :total="totalQuantity" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
-      </el-tab-pane>
-      <el-tab-pane label="已回复" name="call">
-        <el-table
-          v-loading="listLoading"
-          :data="list"
-          element-loading-text="Loading"
-          border
-          fit
-          highlight-current-row>
-          <el-table-column align="center" label="ID" width="95" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{ scope.$index + 1 }}
-            </template>
-          </el-table-column>
-          <el-table-column label="联系人" min-width="50" align="left" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span> {{ scope.row.email }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="提问时间" min-width="80" align="left" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{ scope.row.insterTime |momentStamp }}
-            </template>
-          </el-table-column>
-          <el-table-column label="问题" min-width="80" align="left" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.opiNion }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="答复" min-width="80" align="left" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.feedBackAnswer | feedBackAnswerStatus }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="100" align="center">
-            <template slot-scope="scope">
-              <el-button v-if="scope.row.feedBackAnswer === null" size="mini" type="success" @click="scope.row.edit=!scope.row.edit">答复</el-button>
-              <el-button v-else size="mini" type="success" disabled>已答复</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination :current-page="listQuery.sEcho" :page-sizes="[10,20,30,40,50,100]" :page-size="listQuery.limit" :total="totalQuantity" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
-      </el-tab-pane>
-      <el-tab-pane label="未回复" name="nocall">
-        <el-table
-          v-loading="listLoading"
-          :data="list"
-          element-loading-text="Loading"
-          border
-          fit
-          highlight-current-row>
-          <el-table-column align="center" label="ID" width="95" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{ scope.$index + 1 }}
-            </template>
-          </el-table-column>
-          <el-table-column label="联系人" min-width="50" align="left" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span> {{ scope.row.email }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="提问时间" min-width="80" align="left" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{ scope.row.insterTime |momentStamp }}
-            </template>
-          </el-table-column>
-          <el-table-column label="问题" min-width="80" align="left" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.opiNion }}</span>
-            </template>
-          </el-table-column>
+          <!-- <el-table-column label="答案" min-width="180" align="left" show-overflow-tooltip>
+        <template v-if="scope.row.edit" slot-scope="scope">
+          <template >
+            <el-input class="edit-input" size="small"/>
+            <el-button type="success" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(scope.row)">Ok</el-button>
+            <el-button type="success" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(scope.row)">cancel</el-button>
+          </template>
+        </template>
+      </el-table-column> -->
           <el-table-column label="答复" min-width="80" align="left" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.feedBackAnswer | feedBackAnswerStatus }}</span>
@@ -155,8 +80,7 @@ export default {
   },
   data() {
     return {
-      tempName: '反馈',
-      activeName: 'all',
+      tempName: '固件',
       fileList: [],
       formLabelWidth: '130px',
       list: null,
@@ -164,6 +88,12 @@ export default {
       searchVal: '',
       totalQuantity: 0,
       dialogFormVisible: false,
+      dialogStatus: '新增' + this.tempName,
+      temp: {
+        imageUrl: '',
+        productId: '',
+        appChineseName: ''
+      },
       listQuery: {
         answerStauts: null,
         answerType: 0,
@@ -172,15 +102,34 @@ export default {
         opiNion: null,
         params: {
           startIndex: 0,
-          maxCount: 10
+          maxCount: 20
         },
         userInfoId: null
       },
       rules: {
+        productName: isvalidNoEmpty,
+        updateUrl: isvalidNoEmpty,
+        deviceVersion: isvalidNoEmpty,
+        productCode: isvalidNoEmpty
       }
     }
   },
   computed: {
+    myHeaders() {
+      return {
+        accessToken: getToken(),
+        customerAccountId: getCookie('customerAccountId'),
+        customerId: getCookie('customerId')
+      }
+    }
+  },
+  watch: {
+    dialogFormVisible: function(val) {
+      if (val === false) {
+        this.$refs['dataForm'].resetFields()
+        this.resetTemp()
+      }
+    }
   },
   created() {
     this.fetchData()
@@ -194,6 +143,17 @@ export default {
         this.totalQuantity = response.total
       })
     },
+    resetTemp() {
+      this.temp = {
+        imageUrl: '',
+        productId: '',
+        appChineseName: ''
+      }
+    },
+    search(name) {
+      this.listQuery.productName = this.searchVal
+      this.fetchData()
+    },
     handleCurrentChange: function(page) {
       if (this.listQuery.sEcho !== page) {
         this.listQuery.sEcho = page
@@ -205,6 +165,18 @@ export default {
       this.listQuery.limit = page
       this.listQuery.start = 0
       this.fetchData()
+    },
+    handleAdd: function(params) {
+      this.dialogStatus = '新增' + this.tempName
+      this.dialogFormVisible = true
+    },
+    handleUpdate: function(row) {
+      // this.dialogStatus = '编辑' + this.tempName
+      // getproductInfo(row.productId).then(response => {
+      //   this.dialogFormVisible = true
+      //   this.temp = Object.assign({}, response.data)
+      //   this.temp.deviceVersion = response.data.newVersion
+      // })
     },
     createData: function() {
       this.$refs['dataForm'].validate((valid) => {
@@ -221,8 +193,29 @@ export default {
         }
       })
     },
+    updateData: function() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          editProductInfo(this.temp).then(response => {
+            this.dialogFormVisible = false
+            Message({
+              title: '成功',
+              message: '修改成功',
+              type: 'success',
+              duration: 2 * 1000
+            })
+            this.fetchData()
+          })
+        }
+      })
+    },
+    uploadhandleSuccess(file) {
+      this.temp.updateUrl = process.env.BASE_API + file.msg
+    },
     handleTabClick(tab, event) {
-      this.fetchData()
+      this.pageIndex = 1
+      this.activeName = tab.name
+      this.fetchData(tab.name)
     },
     confirmEdit(row) {
       row.edit = false

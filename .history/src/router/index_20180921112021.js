@@ -34,13 +34,16 @@ export const constantRouterMap = [
   {
     path: '/dashboard',
     component: Layout,
-    children: [{
-      path: 'index',
-      name: '乐源云数据中心',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: '乐源云数据中心', icon: 'gen2' }
-    }]
+    children: [
+      {
+        path: 'index',
+        name: '乐源云数据中心',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: '乐源云数据中心', icon: 'gen2' }
+      }
+    ]
   },
+
   {
     path: '/error',
     component: Layout,

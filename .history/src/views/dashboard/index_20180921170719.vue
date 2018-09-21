@@ -3,18 +3,18 @@
     <PanelGroup @handleSetLineChartUserData="handleSetLineChartUserData"/>
     <LineChart :xdata="xdata" :chart-data1="lineChartUserData" :chart-data2="lineChartBindData"/>
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="6">
+      <el-col :xs="24" :sm="24" :lg="8">
         <PieChart/>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="6">
+      <el-col :xs="24" :sm="24" :lg="8">
         <SexChart/>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="6">
+      <el-col :xs="24" :sm="24" :lg="8">
         <RaddarChart/>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="6">
+      <!-- <el-col :xs="24" :sm="24" :lg="6">
         <BarChart/>
-      </el-col>
+      </el-col> -->
     </el-row>
 
   </div>

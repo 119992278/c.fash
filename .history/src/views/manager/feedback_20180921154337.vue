@@ -164,6 +164,11 @@ export default {
       searchVal: '',
       totalQuantity: 0,
       dialogFormVisible: false,
+      temp: {
+        imageUrl: '',
+        productId: '',
+        appChineseName: ''
+      },
       listQuery: {
         answerStauts: null,
         answerType: 0,
@@ -172,7 +177,7 @@ export default {
         opiNion: null,
         params: {
           startIndex: 0,
-          maxCount: 10
+          maxCount: 20
         },
         userInfoId: null
       },

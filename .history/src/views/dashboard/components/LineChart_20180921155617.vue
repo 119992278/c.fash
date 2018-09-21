@@ -31,13 +31,7 @@ export default {
         return []
       }
     },
-    chartData1: {
-      type: Array,
-      default: function() {
-        return []
-      }
-    },
-    chartData2: {
+    chartData: {
       type: Array,
       default: function() {
         return []
@@ -50,20 +44,14 @@ export default {
     }
   },
   watch: {
-    chartData1: {
-      handler() {
-        this.chart.hideLoading()
-        this.setOptions()
+    chartData: {
+      deep: true,
+      handler(val) {
+        this.setOptions(val)
       }
     },
-    chartData2: {
-      handler() {
-        this.chart.hideLoading()
-        this.setOptions()
-      }
-    },
-    xdata: function() {
-      this.setOption()
+    xdata: function(val) {
+      this.setOption(val)
     }
   },
   mounted() {
@@ -124,23 +112,23 @@ export default {
             },
             smooth: true,
             type: 'line',
-            data: this.chartData1,
+            data: this.chartData,
             animationDuration: 2800,
             animationEasing: 'cubicInOut'
           }, {
             name: '激活设备数',
             itemStyle: {
               normal: {
-                color: '#34BFA3',
+                color: '#FF005A',
                 lineStyle: {
-                  color: '#34BFA3',
+                  color: '#FF005A',
                   width: 2
                 }
               }
             },
             smooth: true,
             type: 'line',
-            data: this.chartData2,
+            data: [1, 2, 3, 4, 5, 6, 7, 8],
             animationDuration: 2800,
             animationEasing: 'cubicInOut'
           }
@@ -149,7 +137,6 @@ export default {
     },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-      this.chart.showLoading({ animation: true, text: '数据加载中..', color: '#1582F0', maskColor: 'rgba(255, 255, 255, 0.8)', textStyle: { fontSize: 50 }})
       this.setOptions()
     }
   }

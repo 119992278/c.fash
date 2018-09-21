@@ -28,7 +28,7 @@ import SexChart from './components/SexChart'
 import BarChart from './components/BarChart'
 import dayjs from 'dayjs'
 import { getToken, getCookie } from '@/utils/auth'
-import { getdynamicDate, cleanCustomerId, sleep } from '@/utils/index'
+import { getdynamicDate, cleanCustomerId } from '@/utils/index'
 import { getCountRegUser, getCountBindUser } from '@/api/dealer'
 export default {
   name: 'DashboardAdmin',
@@ -60,21 +60,21 @@ export default {
   },
   mounted() {},
   methods: {
-    async fetchData() {
-      await getCountRegUser(this.listQuery).then(response => {
-        const _lineChartUserData = []
-        response.rows.map(function(value, key, arr) {
-          _lineChartUserData[parseInt(value.unitFormat) - 1] = parseInt(value.number)
-        })
-        this.xdata.map(function(value, key, arr) {
-          const dayD = dayjs().format('D')
-          if (key < dayD) {
-            _lineChartUserData[key] = _lineChartUserData[key] === undefined ? 0 : _lineChartUserData[key]
-          }
-        })
-        this.lineChartUserData = _lineChartUserData
-      })
-      await getCountBindUser(this.listQuery).then(response => {
+    fetchData() {
+      // getCountRegUser(this.listQuery).then(response => {
+      //   const _lineChartUserData = []
+      //   response.rows.map(function(value, key, arr) {
+      //     _lineChartUserData[parseInt(value.unitFormat) - 1] = parseInt(value.number)
+      //   })
+      //   this.xdata.map(function(value, key, arr) {
+      //     const dayD = dayjs().format('D')
+      //     if (key < dayD) {
+      //       _lineChartUserData[key] = _lineChartUserData[key] === undefined ? 0 : _lineChartUserData[key]
+      //     }
+      //   })
+      //   this.lineChartUserData = _lineChartUserData
+      // })
+      getCountBindUser(this.listQuery).then(response => {
         const _lineChartBindData = []
         response.rows.map(function(value, key, arr) {
           _lineChartBindData[parseInt(value.unitFormat) - 1] = parseInt(value.number)

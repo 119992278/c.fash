@@ -71,11 +71,6 @@
       border
       fit
       highlight-current-row>
-      <el-table-column align="center" label="ID" width="95" show-overflow-tooltip>
-        <template slot-scope="scope">
-          {{ scope.$index + 1 }}
-        </template>
-      </el-table-column>
       <el-table-column label="模板编号" min-width="100" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.id }}
@@ -195,7 +190,7 @@ export default {
       listQuery: {
         authority2: this.$store.state.user.authority.authority2 ? this.$store.state.user.authority.authority2.join(',') : '',
         productName: '',
-        limit: 10,
+        limit: 50,
         sEcho: 1,
         sortCol: 'appName',
         sortDir: 'asc',

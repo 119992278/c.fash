@@ -195,7 +195,7 @@ export default {
         appKey: ''
       },
       listQuery: {
-        authority3: this.$store.state.user.authority.authority3.join(','),
+        authority2: this.$store.state.user.authority.authority2 ? this.$store.state.user.authority.authority2.join(',') : '',
         appChineseName: '',
         limit: 10,
         sEcho: 1,

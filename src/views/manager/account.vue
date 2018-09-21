@@ -167,7 +167,7 @@
       <el-table-column label="操作" min-width="180" align="center">
         <template slot-scope="scope">
           <el-button :disabled="!$store.state.user.authority.authority1.includes(String(scope.row.customerId))" icon="el-icon-edit" size="small" type="success" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button v-if="$store.getters.customerId === 0" size="small" type="primary" @click="handleAuthority(scope.row)">授权</el-button>
+          <el-button v-if="getCookie('customerId') === 0" size="small" type="primary" @click="handleAuthority(scope.row)">授权</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -178,7 +178,8 @@
 <script>
 import { Message, MessageBox } from 'element-ui'
 import { mapStates, mapGetters } from 'vuex'
-import { setAccountAuthority, getAccountAuthority, getAccountList, addDealer, editDealer, getDealerInfo, getListCustomer, queryAccountAuthority, getAPPList, getProductList } from '@/api/dealer'
+import { getToken, getCookie } from '@/utils/auth'
+import { setAccountAuthority, getAccountAuthority, getAccountList, addDealer, editDealer, getDealerInfo, getListCustomer, getAPPList, getProductList } from '@/api/dealer'
 import { isvalidNoEmpty, isvalidEmail } from '@/utils/validate'
 export default {
   filters: {
@@ -272,6 +273,8 @@ export default {
     }
   },
   created() {
+    const difference = (a, b) => { const s = new Set(b); return a.filter(x => !s.has(x)) }
+    console.log(difference([1, 2, 3], [1, 2]))
     this.fetchData()
   },
   mounted() {
@@ -290,6 +293,9 @@ export default {
           _this.customerList.push({ value: String(value1.customerId), customerCode: value1.customerCode, name: value1.customerName })
         })
       })
+    },
+    getCookie(customerId) {
+      return parseInt(getCookie(customerId))
     },
     search(name) {
       this.listQuery.customerAccount = this.searchVal

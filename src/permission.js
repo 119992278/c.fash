@@ -17,8 +17,9 @@ router.beforeEach((to, from, next) => {
       // next()
       if (store.getters.roles.length === 0) {
         store.dispatch('GetAccountAuthority', { customerAccountId: getCookie('customerAccountId') }).then(res => { // 拉取用户权限
-          console.log(JSON.stringify(store.getters.roles[0])) // 左栏权限控制
-          store.dispatch('GenerateRoutes', { roles: ['admin'] }).then(() => {
+          const menuAuthority = store.getters.menuAuthority.split(',')
+          // const menuAuthority = ["1","4","3","2","5","6","7","23","13","14","15","16","17","18"]
+          store.dispatch('GenerateRoutes', { roles: menuAuthority }).then(() => {
             router.addRoutes(store.getters.addRouters) // 添加动态路由
             next({ ...to, replace: true })
           })

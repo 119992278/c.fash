@@ -6,7 +6,9 @@
 import echarts from 'echarts'
 import { getCountAge } from '@/api/dealer'
 require('echarts/theme/macarons') // echarts theme
-import { debounce } from '@/utils'
+import { sleep } from '@/utils'
+import { getCookie } from '@/utils/auth'
+import { cleanCustomerId } from '@/utils/index'
 
 export default {
   props: {
@@ -33,11 +35,10 @@ export default {
   created() {
 
   },
-  mounted() {
+  async mounted() {
     this.initChart(this.xdata, this.ydata)
-    setTimeout(() => {
-      this.fetchData()
-    }, 2000)
+    await sleep(3000)
+    this.fetchData()
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -50,31 +51,33 @@ export default {
   methods: {
     fetchData() {
       const _this = this
-      getCountAge({ beforeDays: null }).then(response => {
-        const _tempYdata = []
-        let beforeAge = 0
-        let afterAge = 0
-        response.rows.map(function(value, key, arr) {
-          if (value.unitFormat === '198') {
-            _tempYdata.push({ value: value.number, name: '80后' })
-          } else if (value.unitFormat === '199') {
-            _tempYdata.push({ value: value.number, name: '90后' })
-          } else if (value.unitFormat === '197') {
-            _tempYdata.push({ value: value.number, name: '70后' })
-          } else if (value.unitFormat === '196') {
-            _tempYdata.push({ value: value.number, name: '60后' })
-          } else {
-            if (parseInt(value.unitFormat) <= 196) {
-              beforeAge += value.number
+      getCountAge({ beforeDays: null, customerId: cleanCustomerId(getCookie('customerId')) }).then(response => {
+        if (response.rows.length > 0) {
+          const _tempYdata = []
+          let beforeAge = 0
+          let afterAge = 0
+          response.rows.map(function(value, key, arr) {
+            if (value.unitFormat === '198') {
+              _tempYdata.push({ value: value.number, name: '80后' })
+            } else if (value.unitFormat === '199') {
+              _tempYdata.push({ value: value.number, name: '90后' })
+            } else if (value.unitFormat === '197') {
+              _tempYdata.push({ value: value.number, name: '70后' })
+            } else if (value.unitFormat === '196') {
+              _tempYdata.push({ value: value.number, name: '60后' })
+            } else {
+              if (parseInt(value.unitFormat) <= 196) {
+                beforeAge += value.number
+              }
+              if (parseInt(value.unitFormat) >= 199) {
+                afterAge += value.number
+              }
             }
-            if (parseInt(value.unitFormat) >= 199) {
-              afterAge += value.number
-            }
-          }
-        })
-        _tempYdata.push({ value: beforeAge, name: '60前' })
-        _tempYdata.push({ value: afterAge, name: '00后' })
-        _this.initChart(this.xdata, _tempYdata)
+          })
+          _tempYdata.push({ value: beforeAge, name: '60前' })
+          _tempYdata.push({ value: afterAge, name: '00后' })
+          _this.initChart(this.xdata, _tempYdata)
+        }
       })
     },
     initChart(xdata, ydata) {

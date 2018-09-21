@@ -45,240 +45,10 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/manage',
-    component: Layout,
-    redirect: '/manage/account',
-    name: '超级管理员',
-    meta: { title: '超级管理员', icon: 'example' },
-    children: [
-      {
-        path: 'account',
-        name: '账户管理',
-        component: () => import('@/views/manager/account'),
-        meta: { title: '账户管理', icon: '' }
-      },
-      {
-        path: 'firmware',
-        name: '固件管理',
-        component: () => import('@/views/manager/firmware'),
-        meta: { title: '固件管理', icon: '' }
-      },
-      {
-        path: 'app',
-        name: 'APP管理',
-        component: () => import('@/views/manager/app'),
-        meta: { title: 'APP管理', icon: '' }
-      },
-      {
-        path: 'email',
-        name: '邮件模板',
-        component: () => import('@/views/manager/template'),
-        meta: { title: '邮件模板', icon: '' }
-      },
-      {
-        path: 'tickling',
-        name: '意见反馈',
-        component: () => import('@/views/errorPage/404'),
-        meta: { title: '意见反馈', icon: '' }
-      },
-      {
-        path: 'chart',
-        name: '用户图表',
-        component: () => import('@/views/manager/chartUser'),
-        meta: { title: '用户图表', icon: '' }
-      },
-      {
-        path: 'user',
-        name: '用户列表',
-        component: () => import('@/views/manager/user'),
-        meta: { title: '用户列表', icon: '' }
-      },
-      {
-        path: 'history',
-        name: '操作历史',
-        component: () => import('@/views/manager/history'),
-        meta: { title: '操作历史', icon: '' }
-      },
-      {
-        path: 'dial',
-        name: '表盘管理',
-        component: () => import('@/views/manager/dial'),
-        meta: { title: '表盘管理', icon: '' }
-      }
-    ]
-  },
-  {
-    path: '/datas',
-    component: Layout,
-    redirect: '/viewData/user/index',
-    name: '查看数据',
-    meta: {
-      title: '查看数据',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'user',
-        component: () => import('@/views/viewData/user/index'), // Parent router-view
-        name: '用户注册数',
-        meta: { title: '用户注册数' },
-        children: [
-          {
-            path: 'chartDay',
-            component: () => import('@/views/viewData/user/chartDay'),
-            name: '每月注册数',
-            meta: { title: '每月注册数', icon: '' }
-          },
-          // {
-          //   path: 'chartWeek',
-          //   component: () => import('@/views/viewData/user/chartWeek'),
-          //   name: '每季度注册',
-          //   meta: { title: '每季度注册' }
-          // },
-          {
-            path: 'chartYear',
-            component: () => import('@/views/viewData/user/chartYear'),
-            name: '每年注册数',
-            meta: { title: '每年注册数' }
-          }
-        ]
-      },
-      {
-        path: 'bind',
-        component: () => import('@/views/viewData/bind/index'), // Parent router-view
-        name: '设备激活数',
-        meta: { title: '设备激活数', icon: '' },
-        children: [
-          {
-            path: 'chartDay',
-            component: () => import('@/views/viewData/bind/chartDay'),
-            name: '每月激活数',
-            meta: { title: '每月激活数', icon: '' }
-          },
-          // {
-          //   path: 'chartWeek',
-          //   component: () => import('@/views/viewData/bind/chartWeek'),
-          //   name: '每季度激活数',
-          //   meta: { title: '每季度激活数' }
-          // },
-          {
-            path: 'chartYear',
-            component: () => import('@/views/viewData/bind/chartYear'),
-            name: '每年激活数',
-            meta: { title: '每年激活数' }
-          }
-        ]
-      },
-      {
-        path: 'ctivityUser',
-        component: () => import('@/views/viewData/ctivityUser/index'),
-        name: '用户群体分析',
-        meta: { title: '用户群体分析', icon: '' },
-        children: [
-          {
-            path: 'chartDay',
-            component: () => import('@/views/viewData/ctivityUser/chartDay'),
-            name: '每月活跃数',
-            meta: { title: '每月活跃数', icon: '' }
-          },
-          // {
-          //   path: 'chartWeek',
-          //   component: () => import('@/views/viewData/ctivityUser/chartWeek'),
-          //   name: '每季度分析',
-          //   meta: { title: '每季度分析' }
-          // },
-          {
-            path: 'chartYear',
-            component: () => import('@/views/viewData/ctivityUser/chartYear'),
-            name: '每年活跃数',
-            meta: { title: '每年活跃数' }
-          }
-        ]
-      },
-      {
-        path: 'user1',
-        component: () => import('@/views/manager/user'),
-        name: '用户列表1',
-        meta: { title: '用户列表', icon: '' }
-      },
-      {
-        path: 'chartSport',
-        component: () => import('@/views/viewData/chartSport'),
-        name: '运动数据分析',
-        meta: { title: '运动数据分析', icon: '' }
-      },
-      {
-        path: 'list6',
-        component: () => import('@/views/errorPage/404'),
-        name: '重置用户密码',
-        meta: { title: '重置用户密码', icon: '' }
-      }
-    ]
-  },
-  {
-    path: '/extension',
-    component: Layout,
-    redirect: '/extension/list',
-    name: '推广服务',
-    meta: {
-      title: '推广服务',
-      icon: 'guide'
-    },
-    children: [
-      {
-        path: 'list1',
-        component: () => import('@/views/errorPage/404'),
-        name: '邮件推广',
-        meta: { title: '邮件推广', icon: '' }
-      },
-      {
-        path: 'list2',
-        component: () => import('@/views/errorPage/404'),
-        name: '短信邮件推广',
-        meta: { title: '短信邮件推广', icon: '' }
-      },
-      {
-        path: 'list3',
-        component: () => import('@/views/errorPage/404'),
-        name: 'APP消息推送',
-        meta: { title: 'APP消息推送', icon: '' }
-      }
-    ]
-  },
-  {
-    path: '/setting',
-    component: Layout,
-    redirect: '/setting/list',
-    name: '设置',
-    meta: {
-      title: '设置',
-      icon: 'component'
-    },
-    children: [
-      {
-        path: 'list1',
-        component: () => import('@/views/errorPage/404'),
-        name: 'APP设置',
-        meta: { title: 'APP设置', icon: '' }
-      },
-      {
-        path: 'list2',
-        component: () => import('@/views/errorPage/404'),
-        name: '固件设置',
-        meta: { title: '固件设置', icon: '' }
-      },
-      {
-        path: 'list3',
-        component: () => import('@/views/errorPage/404'),
-        name: '常见问题设置',
-        meta: { title: '常见问题设置', icon: '' }
-      }
-    ]
-  },
-  {
     path: '/error',
     component: Layout,
     redirect: 'noredirect',
+    hidden: true,
     name: '错误信息',
     meta: {
       title: '错误信息',
@@ -300,7 +70,7 @@ export const constantRouterMap = [
     ]
   },
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
-  { path: '*', redirect: '/404', hidden: true },
+  // { path: '*', redirect: '/404', hidden: true },
   {
     path: '/404',
     component: () => import('@/views/errorPage/404'),
@@ -309,32 +79,228 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  // mode: 'history', //后端支持可开
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
 
+// 动态路由控制
 export const asyncRouterMap = [
   {
-    path: '/permission',
+    path: '/manage',
     component: Layout,
-    redirect: '/permission/index',
-    alwaysShow: true, // will always show the root menu
+    redirect: '/manage/account',
+    name: '超级管理员',
+    alwaysShow: true,
+    meta: { title: '超级管理员', icon: 'example' },
+    children: [
+      {
+        path: 'account',
+        name: '账户管理',
+        component: () => import('@/views/manager/account'),
+        meta: { title: '账户管理', icon: '', roles: ['1'] }
+      },
+      {
+        path: 'firmware',
+        name: '固件管理',
+        component: () => import('@/views/manager/firmware'),
+        meta: { title: '固件管理', icon: '', roles: ['4'] }
+      },
+      {
+        path: 'app',
+        name: 'APP管理',
+        component: () => import('@/views/manager/app'),
+        meta: { title: 'APP管理', icon: '', roles: ['3'] }
+      },
+      {
+        path: 'email',
+        name: '邮件模板',
+        component: () => import('@/views/manager/template'),
+        meta: { title: '邮件模板', icon: '', roles: ['21'] }
+      },
+      {
+        path: 'tickling',
+        name: '意见反馈',
+        component: () => import('@/views/manager/feedback'),
+        meta: { title: '意见反馈', icon: '', roles: ['2'] }
+      },
+      {
+        path: 'chart',
+        name: '用户图表',
+        component: () => import('@/views/manager/chartUser'),
+        meta: { title: '用户图表', icon: '', roles: ['5'] }
+      },
+      {
+        path: 'user',
+        name: '用户列表',
+        component: () => import('@/views/manager/user'),
+        meta: { title: '用户列表', icon: '', roles: ['6'] }
+      },
+      {
+        path: 'history',
+        name: '操作历史',
+        component: () => import('@/views/manager/history'),
+        meta: { title: '操作历史', icon: '', roles: ['7'] }
+      },
+      {
+        path: 'dial',
+        name: '表盘管理',
+        component: () => import('@/views/manager/dial'),
+        meta: { title: '表盘管理', icon: '', roles: ['23'] }
+      }
+    ]
+  },
+  {
+    path: '/datas',
+    component: Layout,
+    redirect: '/viewData/user/index',
+    name: '查看数据',
+    alwaysShow: true,
     meta: {
-      title: 'permission',
-      icon: 'lock',
-      roles: ['admin', '131'] // you can set roles in root nav
+      title: '查看数据',
+      icon: 'table'
     },
     children: [
       {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
-        meta: {
-          title: 'pagePermission',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
+        path: 'user',
+        component: () => import('@/views/viewData/user/index'),
+        name: '用户注册数',
+        meta: { title: '用户注册数', roles: ['8'] },
+        children: [
+          {
+            path: 'chartDay',
+            component: () => import('@/views/viewData/user/chartDay'),
+            name: '每月注册数',
+            meta: { title: '每月注册数', icon: '' }
+          },
+          {
+            path: 'chartYear',
+            component: () => import('@/views/viewData/user/chartYear'),
+            name: '每年注册数',
+            meta: { title: '每年注册数' }
+          }
+        ]
+      },
+      {
+        path: 'bind',
+        component: () => import('@/views/viewData/bind/index'), // Parent router-view
+        name: '设备激活数',
+        meta: { title: '设备激活数', icon: '', roles: ['9'] },
+        children: [
+          {
+            path: 'chartDay',
+            component: () => import('@/views/viewData/bind/chartDay'),
+            name: '每月激活数',
+            meta: { title: '每月激活数', icon: '' }
+          },
+          {
+            path: 'chartYear',
+            component: () => import('@/views/viewData/bind/chartYear'),
+            name: '每年激活数',
+            meta: { title: '每年激活数' }
+          }
+        ]
+      },
+      {
+        path: 'ctivityUser',
+        component: () => import('@/views/viewData/ctivityUser/index'),
+        name: '用户群体分析',
+        meta: { title: '用户群体分析', icon: '', roles: ['10'] },
+        children: [
+          {
+            path: 'chartDay',
+            component: () => import('@/views/viewData/ctivityUser/chartDay'),
+            name: '每月活跃数',
+            meta: { title: '每月活跃数', icon: '' }
+          },
+          {
+            path: 'chartYear',
+            component: () => import('@/views/viewData/ctivityUser/chartYear'),
+            name: '每年活跃数',
+            meta: { title: '每年活跃数' }
+          }
+        ]
+      },
+      {
+        path: 'user1',
+        component: () => import('@/views/manager/user'),
+        name: '用户列表1',
+        meta: { title: '用户列表', icon: '', roles: ['11'] }
+      },
+      {
+        path: 'chartSport',
+        component: () => import('@/views/viewData/chartSport'),
+        name: '运动数据分析',
+        meta: { title: '运动数据分析', icon: '', roles: ['12'] }
+      },
+      {
+        path: 'list6',
+        component: () => import('@/views/errorPage/404'),
+        name: '重置用户密码',
+        meta: { title: '重置用户密码', icon: '', roles: ['22'] }
       }
     ]
-  }
+  },
+  {
+    path: '/service',
+    component: Layout,
+    redirect: '/service/email',
+    name: '推广服务',
+    alwaysShow: true,
+    meta: {
+      title: '推广服务',
+      icon: 'guide'
+    },
+    children: [
+      {
+        path: 'email',
+        component: () => import('@/views/service/email'),
+        name: '邮件推广',
+        meta: { title: '邮件推广', icon: '', roles: ['13'] }
+      },
+      {
+        path: 'note',
+        component: () => import('@/views/service/note'),
+        name: '短信邮件推广',
+        meta: { title: '短信邮件推广', icon: '', roles: ['14'] }
+      },
+      {
+        path: 'list3',
+        component: () => import('@/views/service/push'),
+        name: 'APP消息推送',
+        meta: { title: 'APP消息推送', icon: '', roles: ['15'] }
+      }
+    ]
+  },
+  {
+    path: '/setting',
+    component: Layout,
+    redirect: '/setting/list',
+    name: '设置',
+    alwaysShow: true,
+    meta: {
+      title: '设置',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: 'list1',
+        component: () => import('@/views/errorPage/404'),
+        name: 'APP设置',
+        meta: { title: 'APP设置', icon: '', roles: ['16'] }
+      },
+      {
+        path: 'list2',
+        component: () => import('@/views/errorPage/404'),
+        name: '固件设置',
+        meta: { title: '固件设置', icon: '', roles: ['17'] }
+      },
+      {
+        path: 'list3',
+        component: () => import('@/views/errorPage/404'),
+        name: '常见问题设置',
+        meta: { title: '常见问题设置', icon: '', roles: ['18'] }
+      }
+    ]
+  },
+  { path: '*', redirect: '/404', hidden: true }
 ]

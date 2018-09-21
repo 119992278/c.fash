@@ -133,7 +133,7 @@ export default {
         appChineseName: ''
       },
       listQuery: {
-        authority3: this.$store.state.user.authority.authority3.join(','),
+        authority3: this.$store.state.user.authority.authority3 ? this.$store.state.user.authority.authority3.join(',') : '',
         productName: '',
         limit: 50,
         sEcho: 1,

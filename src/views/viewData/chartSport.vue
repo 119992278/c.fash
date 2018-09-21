@@ -65,7 +65,7 @@
 
 <script>
 import { getToken, getCookie } from '@/utils/auth'
-import { momentStampFormat } from '@/utils/index'
+import { momentStampFormat, cleanCustomerId } from '@/utils/index'
 import { Message, MessageBox } from 'element-ui'
 import dayjs from 'dayjs'
 import { getSportList } from '@/api/dealer'
@@ -112,7 +112,7 @@ export default {
       return {
         accessToken: getToken(),
         customerAccountId: getCookie('customerAccountId'),
-        customerId: getCookie('customerId')
+        customerId: cleanCustomerId(getCookie('customerId'))
       }
     }
   },

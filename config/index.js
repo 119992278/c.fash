@@ -11,7 +11,7 @@ module.exports = {
     proxyTable: {
       '/':{
         target:'http://testc.appscomm.cn',
-       // target:'https://c.fashioncomm.com/',
+      // target:'https://c.fashioncomm.com/',
         changeOrigin:true,
         pathRewrite:{} 
       }

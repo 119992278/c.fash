@@ -38,6 +38,9 @@ export function validatAlphabets(str) {
   return reg.test(str)
 }
 
+// 数字验证
+export const validateNumber = n => !isNaN(parseFloat(n)) && isFinite(n) && Number(n) === n
+
 /* 判断不为空*/
 export var isvalidNoEmpty = [{
   required: true,

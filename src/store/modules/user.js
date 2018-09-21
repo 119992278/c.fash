@@ -10,6 +10,7 @@ const user = {
     customerAccountId: getCookie('customerAccountId'),
     contactUser: getCookie('contactUser'),
     authority: {},
+    menuAuthority: getCookie('menuAuthority'),
     iconUrl: '',
     roles: []
   },
@@ -31,6 +32,10 @@ const user = {
     SET_CUSTOMERACCOUNTID: (state, val) => {
       setCookie('customerAccountId', val)
       state.customerAccountId = val
+    },
+    SET_MENUAUTHOR: (state, val) => {
+      setCookie('menuAuthority', val)
+      state.menuAuthority = val
     },
     SET_CUSTOMERNAME: (state, name) => {
       setCookie('contactUser', name)
@@ -69,8 +74,9 @@ const user = {
           commit('SET_TOKEN', data.customerToken)
           commit('SET_CUSTOMERID', data.customerId)
           commit('SET_CUSTOMERACCOUNTID', data.customerAccountId)
-          commit('SET_CUSTOMERNAME', data.contactUser)
+          commit('SET_CUSTOMERNAME', data.customerAccount)
           commit('SET_ICONURL', data.iconUrl)
+          commit('SET_MENUAUTHOR', data.authority)
           resolve()
         }).catch(error => {
           reject(error)
@@ -84,17 +90,28 @@ const user = {
         getAccountAuthority(state.customerAccountId).then(response => {
           const data = response.data
           if (data != null) {
-            if (data.authority1 && data.authority2 && data.authority3) {
+            // if (data.authority1 && data.authority2 && data.authority3) {
+            //   commit('SET_AUTOHRITY1', data.authority1.split(','))
+            //   commit('SET_AUTOHRITY2', data.authority2.split(','))
+            //   commit('SET_AUTOHRITY3', data.authority3.split(','))
+            // }
+            if (data.authority1 !== '') {
               commit('SET_AUTOHRITY1', data.authority1.split(','))
-              commit('SET_AUTOHRITY2', data.authority2.split(','))
-              commit('SET_AUTOHRITY3', data.authority3.split(','))
             } else {
               commit('SET_AUTOHRITY1', '')
+            }
+            if (data.authority2 !== '') {
+              commit('SET_AUTOHRITY2', data.authority2.split(','))
+            } else {
               commit('SET_AUTOHRITY2', '')
+            }
+            if (data.authority3 !== '') {
+              commit('SET_AUTOHRITY3', data.authority3.split(','))
+            } else {
               commit('SET_AUTOHRITY3', '')
             }
-            commit('SET_ROLES', [data.authority1.split(','), data.authority2.split(','), data.authority3.split(',')])
           }
+          commit('SET_ROLES', ['SET_AUTOHRITY1', 'SET_AUTOHRITY2', 'SET_AUTOHRITY3'])
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -107,6 +124,7 @@ const user = {
       return new Promise((resolve, reject) => {
         commit('SET_CUSTOMERNAME', '')
         commit('SET_ICONURL', '')
+        commit('SET_MENUAUTHOR', '')
         removeToken()
         resolve()
       })

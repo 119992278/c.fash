@@ -8,7 +8,8 @@
 <script>
 import dayjs from 'dayjs'
 import Chart from '@/components/Charts/mixChart'
-import { getdynamicDate } from '@/utils/index'
+import { getToken, getCookie } from '@/utils/auth'
+import { getdynamicDate, cleanCustomerId } from '@/utils/index'
 import { getCountActivityUser } from '@/api/dealer'
 export default {
   name: 'MixChart',
@@ -22,7 +23,7 @@ export default {
       ydata: [],
       title: '当天活跃数',
       listQuery: {
-        customerId: null,
+        customerId: cleanCustomerId(getCookie('customerId')),
         endTime: dayjs().add(0, 'month').endOf('month').format('YYYY-MM-DD HH:mm:ss'),
         queryType: 3,
         startTime: dayjs().add(0, 'month').startOf('month').format('YYYY-MM-DD HH:mm:ss')

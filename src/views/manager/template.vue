@@ -188,7 +188,7 @@ export default {
         templateType: '3'
       },
       listQuery: {
-        authority2: this.$store.state.user.authority.authority2.join(','),
+        authority2: this.$store.state.user.authority.authority2 ? this.$store.state.user.authority.authority2.join(',') : '',
         productName: '',
         limit: 50,
         sEcho: 1,
@@ -352,6 +352,6 @@ export default {
       }
     }
   }
-  .ql-editor{height:250px}
+.ql-editor{height:250px}
 .el-tag{font-size:14px}
 </style>

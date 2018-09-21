@@ -42,6 +42,8 @@ export function parseTime(time, cFormat) {
   return time_str
 }
 
+export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 
@@ -126,4 +128,18 @@ export function getdynamicDate(time) {
 export function isEmptyObject(obj) {
   for (var n in obj) { return false }
   return true
+}
+
+// 判断为 空对象
+export function cleanCustomerId(customerId) {
+  const _customerId = customerId === '0' ? null : customerId
+  return _customerId
+}
+
+export function getAuthority3() {
+  if (this.$store.state.user.authority.authority3 !== '') {
+    return this.$store.state.user.authority.authority3.join(',')
+  } else {
+    return ''
+  }
 }

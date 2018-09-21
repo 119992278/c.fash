@@ -49,7 +49,9 @@
 
 <script>
 import CountTo from 'vue-count-to'
+import { getCookie } from '@/utils/auth'
 import { getRegUserCount, getDeviceCount, getBindUserCount } from '@/api/dealer'
+import { cleanCustomerId } from '@/utils/index'
 export default {
   components: {
     CountTo
@@ -58,8 +60,8 @@ export default {
     return {
       todayUser: 0,
       todayDevice: 0,
-      totalUser: 300000,
-      totalDevice: 300000
+      totalUser: 0,
+      totalDevice: 0
     }
   },
   created() {
@@ -71,18 +73,18 @@ export default {
       this.getDeviceCount()
     },
     getUserCount() {
-      getRegUserCount({ beforeDays: null }).then(response => {
+      getRegUserCount({ beforeDays: null, customerId: cleanCustomerId(getCookie('customerId')) }).then(response => {
         this.totalUser = response.data
       })
-      getRegUserCount({ beforeDays: 0 }).then(response => {
+      getRegUserCount({ beforeDays: 0, customerId: cleanCustomerId(getCookie('customerId')) }).then(response => {
         this.todayUser = response.data
       })
     },
     getDeviceCount() {
-      getDeviceCount({}).then(response => {
+      getDeviceCount({ customerId: cleanCustomerId(getCookie('customerId')) }).then(response => {
         this.totalDevice = response.data
       })
-      getBindUserCount({ beforeDays: 0 }).then(response => {
+      getBindUserCount({ beforeDays: 0, customerId: cleanCustomerId(getCookie('customerId')) }).then(response => {
         this.todayDevice = response.data
       })
     },

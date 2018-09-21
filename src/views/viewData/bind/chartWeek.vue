@@ -7,6 +7,7 @@
 <script>
 import dayjs from 'dayjs'
 import Chart from '@/components/Charts/mixChart'
+import { getToken, getCookie } from '@/utils/auth'
 import { getdynamicDate } from '@/utils/index'
 import { getCountBindUser } from '@/api/dealer'
 export default {
@@ -20,7 +21,7 @@ export default {
       ydata: [],
       title: '每周注册数',
       listQuery: {
-        customerId: null,
+        customerId: getCookie('customerId'),
         endTime: dayjs().add(0, 'month').endOf('month').format('YYYY-MM-DD HH:mm:ss'), // 做到这里了!
         queryType: 1,
         startTime: dayjs().add(-2, 'month').startOf('month').format('YYYY-MM-DD HH:mm:ss')

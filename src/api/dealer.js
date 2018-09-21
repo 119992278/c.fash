@@ -62,14 +62,6 @@ export function getListCustomer(params) {
   })
 }
 
-// 获取权限
-export function queryAccountAuthority(params) {
-  return request({
-    url: '/dealer/accountAuthority/query',
-    method: 'post',
-    data: params
-  })
-}
 // 固件列表
 export function getProductList(params) {
   return request({
@@ -341,6 +333,24 @@ export function addWatchFace(params) {
 export function getSportList(params) {
   return request({
     url: '/dealer/sport/list',
+    method: 'post',
+    data: params
+  })
+}
+
+// 添加操作历史
+export function addHistory(params) {
+  return request({
+    url: '/dealer/operationHistory/add',
+    method: 'post',
+    data: params
+  })
+}
+
+// 获取问题反馈
+export function getfeedBackList(params) {
+  return request({
+    url: '/dealer/feedBack/list',
     method: 'post',
     data: params
   })

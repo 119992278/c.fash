@@ -6,7 +6,8 @@
 import echarts from 'echarts'
 import { getCountSex } from '@/api/dealer'
 require('echarts/theme/macarons') // echarts theme
-import { debounce } from '@/utils'
+import { getCookie } from '@/utils/auth'
+import { sleep, cleanCustomerId } from '@/utils/index'
 
 export default {
   props: {
@@ -33,11 +34,10 @@ export default {
   created() {
 
   },
-  mounted() {
+  async mounted() {
     this.initChart(this.xdata, this.ydata)
-    setTimeout(() => {
-      this.fetchData()
-    }, 2000)
+    await sleep(2000)
+    this.fetchData()
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -50,26 +50,25 @@ export default {
   methods: {
     fetchData() {
       const _this = this
-      getCountSex({ beforeDays: null }).then(response => {
-        const _tempYdata = []
-        const beforeAge = 0
-        const afterAge = 0
-        response.rows.map(function(value, key, arr) {
-          if (value.unitFormat === '0') {
-            _tempYdata.push({ value: value.number, name: '男' })
-          } else if (value.unitFormat === '1') {
-            _tempYdata.push({ value: value.number, name: '女' })
-          }
-        })
-        _this.initChart(this.xdata, _tempYdata)
+      getCountSex({ beforeDays: null, customerId: cleanCustomerId(getCookie('customerId')) }).then(response => {
+        if (response.rows.length > 0) {
+          const _tempYdata = []
+          const beforeAge = 0
+          const afterAge = 0
+          response.rows.map(function(value, key, arr) {
+            if (value.unitFormat === '0') {
+              _tempYdata.push({ value: value.number, name: '男' })
+            } else if (value.unitFormat === '1') {
+              _tempYdata.push({ value: value.number, name: '女' })
+            }
+          })
+          _this.initChart(this.xdata, _tempYdata)
+        }
       })
     },
     initChart(xdata, ydata) {
       this.chart = echarts.init(this.$el, 'macarons')
       this.chart.setOption({
-        // title: {
-        //   text: '年龄段分布'
-        // },
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c} ({d}%)'

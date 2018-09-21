@@ -102,7 +102,7 @@ export default {
         watchFaceName: null
       },
       listQuery: {
-        authority3: this.$store.state.user.authority.authority3.join(','),
+        authority2: this.$store.state.user.authority.authority2 ? this.$store.state.user.authority.authority2.join(',') : '',
         productName: '',
         limit: 50,
         sEcho: 1,

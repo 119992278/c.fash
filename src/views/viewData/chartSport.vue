@@ -69,7 +69,7 @@ import { momentStampFormat, cleanCustomerId } from '@/utils/index'
 import { Message, MessageBox } from 'element-ui'
 import dayjs from 'dayjs'
 import { getSportList } from '@/api/dealer'
-import { isvalidNoEmpty, isvalidURL } from '@/utils/validate'
+import { isvalidNoEmpty } from '@/utils/validate'
 export default {
   filters: {
     momentStamp(timestamp) {

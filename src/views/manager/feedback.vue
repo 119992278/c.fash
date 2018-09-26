@@ -136,7 +136,7 @@ import { getToken, getCookie } from '@/utils/auth'
 import { momentStampFormat } from '@/utils/index'
 import { Message, MessageBox } from 'element-ui'
 import { getfeedBackList, addProduct, getHardwareVersion, getproductInfo, editProductInfo } from '@/api/dealer'
-import { isvalidNoEmpty, isvalidURL } from '@/utils/validate'
+import { isvalidNoEmpty } from '@/utils/validate'
 export default {
   filters: {
     momentStamp(timestamp) {

@@ -11,18 +11,82 @@
         <el-form-item :label-width="formLabelWidth" label="编号:" prop="productName">
           <el-input v-model="temp.productCode" disabled/>
         </el-form-item>
-        <el-table :data="gridData">
-          <el-table-column property="versionId" label="版本号" width="100"/>
-          <el-table-column property="firmwareType" label="Name" width="100"/>
-          <el-table-column property="deviceVersion" label="deviceVer" width="100"/>
-          <el-table-column property="buildVersion" label="buildVer" width="100"/>
-          <el-table-column property="updateUrl" label="updateUrl" width="300" show-overflow-tooltip/>
-          <el-table-column property="md5" label="md5" width="300" show-overflow-tooltip/>
+        <!-- <el-table :data="gridData">
+          <el-table-column property="versionId" label="版本号" align="center" width="100"/>
+          <el-table-column property="firmwareType" label="Name" align="center" width="100"/>
+          <el-table-column property="deviceVersion" label="deviceVer" align="center" width="100"/>
+          <el-table-column property="buildVersion" label="buildVer" align="center" width="100"/>
+          <el-table-column property="updateUrl" label="updateUrl" align="center" width="300" show-overflow-tooltip/>
+          <el-table-column property="md5" label="md5" width="300" align="center" show-overflow-tooltip/>
           <el-table-column property="byforce" label="强制升级"/>
+        </el-table> -->
+        <el-table :data="gridData">
+          <el-table-column label="版本号" align="center" width="90" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.versionId"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="Name" align="center" width="90" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.firmwareType"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="deviceVer" align="center" width="90" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.deviceVersion"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="buildVer" align="center" width="90" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.buildVersion"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="强制升级" align="center" width="100" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.byforce"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="updateUrl" align="center" width="300" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.updateUrl"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="md5" align="center" width="300" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.md5"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="上传固件" align="center" width="100" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-upload
+                ref="upload"
+                :headers="myHeaders"
+                :on-success = "uploadhandleOnSuccess(scope.row)"
+                :file-list="fileList"
+                :auto-upload="true"
+                :show-file-list="false"
+                :action="uploadAction"
+                accept=".zip"
+                class="upload-demo">
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              </el-upload>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="120">
+            <template slot-scope="scope">
+              <el-button
+                type="text"
+                size="small"
+                @click.native.prevent="deleteRow(scope.$index)">
+                移除
+              </el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-form>
       <div class="dialog-footer" align="right">
         <el-button @click="dialogHardwareFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="addDialogHardwareForm">新增一行</el-button>
         <!-- <el-button type="primary">编辑</el-button> -->
       </div>
     </el-dialog>
@@ -36,9 +100,9 @@
             :file-list="fileList"
             :auto-upload="true"
             :show-file-list="false"
+            :action="uploadAction"
             accept=".zip"
-            class="upload-demo"
-            action="http://testc.appscomm.cn/dealer/upload/">
+            class="upload-demo">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button> (只能上传zip文件，且不超过800kb)
           </el-upload>
         </el-form-item>
@@ -92,7 +156,7 @@
           <span class="link-type" @click="handleHardwareForm(scope.row)">{{ scope.row.productCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="当前固件版本" min-width="160" align="center" show-overflow-tooltip>
+      <!-- <el-table-column label="当前固件版本" min-width="160" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.currentVersion }}
         </template>
@@ -111,7 +175,7 @@
         <template slot-scope="scope">
           {{ scope.row.updateMessage }}
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="固件功能" min-width="160" align="left" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.versionMessage }}
@@ -133,7 +197,7 @@ import { getToken, getCookie } from '@/utils/auth'
 import { momentStampFormat } from '@/utils/index'
 import { Message, MessageBox } from 'element-ui'
 import { getProductList, addProduct, getHardwareVersion, getproductInfo, editProductInfo, pullOffVersion } from '@/api/dealer'
-import { isvalidNoEmpty, isvalidURL } from '@/utils/validate'
+import { isvalidNoEmpty } from '@/utils/validate'
 export default {
   filters: {
     momentStamp(timestamp) {
@@ -147,6 +211,7 @@ export default {
     return {
       tempName: '固件',
       fileList: [],
+      uploadAction: process.env.BASE_API + '/dealer/upload',
       formLabelWidth: '130px',
       list: null,
       listLoading: true,
@@ -198,6 +263,12 @@ export default {
     dialogFormVisible: function(val) {
       if (val === false) {
         this.$refs['dataForm'].resetFields()
+        this.resetTemp()
+      }
+    },
+    dialogHardwareFormVisible: function(val) {
+      if (val === false) {
+        this.resetTemp()
       }
     }
   },
@@ -212,6 +283,23 @@ export default {
         this.list = response.rows
         this.totalQuantity = response.total
       })
+    },
+    deleteRow(index, rows) {
+      this.gridData.splice(index)
+    },
+    resetTemp() {
+      this.temp = {
+        customerId: null,
+        shelveFlag: '',
+        mainImg: '',
+        productName: '',
+        productCode: '',
+        deviceVersion: '',
+        fileCrcSize: '',
+        updateUrl: '',
+        versionMessage: '',
+        updateMessage: ''
+      }
     },
     search(name) {
       this.listQuery.productName = this.searchVal
@@ -246,6 +334,7 @@ export default {
         if (valid) {
           addProduct(this.temp).then(response => {
             this.dialogFormVisible = false
+            this.fetchData()
             Message({
               title: '成功',
               message: '创建成功',
@@ -256,11 +345,15 @@ export default {
         }
       })
     },
+    addDialogHardwareForm() {
+      this.gridData.push({})
+    },
     updateData: function() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           editProductInfo(this.temp).then(response => {
             this.dialogFormVisible = false
+            this.fetchData()
             Message({
               title: '成功',
               message: '修改成功',
@@ -297,6 +390,8 @@ export default {
     },
     uploadhandleSuccess(file) {
       this.temp.updateUrl = process.env.BASE_API + file.msg
+    },
+    uploadhandleOnSuccess(file) {
     }
   }
 }

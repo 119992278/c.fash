@@ -35,8 +35,8 @@
 </template>
 
 <script>
+import validator from 'validator'
 import path from 'path'
-import { validateURL } from '@/utils/validate'
 import Item from './Item'
 
 export default {
@@ -82,7 +82,7 @@ export default {
       return path.resolve(this.basePath, routePath)
     },
     isExternalLink(routePath) {
-      return validateURL(routePath)
+      return validator.isURL(routePath)
     },
     clickLink(routePath, e) {
       if (!this.isExternalLink(routePath)) {

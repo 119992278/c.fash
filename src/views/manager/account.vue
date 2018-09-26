@@ -179,6 +179,7 @@
 import { Message, MessageBox } from 'element-ui'
 import { mapStates, mapGetters } from 'vuex'
 import { getToken, getCookie } from '@/utils/auth'
+import _ from 'lodash'
 import { setAccountAuthority, getAccountAuthority, getAccountList, addDealer, editDealer, getDealerInfo, getListCustomer, getAPPList, getProductList } from '@/api/dealer'
 import { isvalidNoEmpty, isvalidEmail } from '@/utils/validate'
 export default {
@@ -197,9 +198,6 @@ export default {
   },
   data() {
     return {
-      // contactUser1: this.$store.state.user.contactUser,
-      // userAuthority: this.$store.state.user.authority.authority1,
-      // userCustomerId: this.$store.getters.customerId,
       formLabelWidth: '130px',
       accountList: null,
       listLoading: true,
@@ -263,6 +261,8 @@ export default {
       if (val === false) {
         this.$refs['dataForm'].resetFields()
         this.resetTemp()
+        this.productList = []
+        this.appList = []
       }
     },
     dialogFormAuthority: function(val) {
@@ -273,8 +273,6 @@ export default {
     }
   },
   created() {
-    const difference = (a, b) => { const s = new Set(b); return a.filter(x => !s.has(x)) }
-    console.log(difference([1, 2, 3], [1, 2]))
     this.fetchData()
   },
   mounted() {
@@ -285,10 +283,11 @@ export default {
       this.listLoading = true
       getAccountList(this.listQuery).then(response => {
         this.listLoading = false
-        this.accountList = response.rows
+        this.accountList = _.sortBy(response.rows, ['customerAccount'])
         this.totalQuantity = response.total
       })
       getListCustomer({}).then(response => {
+        _this.customerList = []
         response.rows.map(function(value1, index, arr) {
           _this.customerList.push({ value: String(value1.customerId), customerCode: value1.customerCode, name: value1.customerName })
         })
@@ -302,7 +301,6 @@ export default {
       this.fetchData()
     },
     handleCurrentChange: function(page) {
-      console.log('page1=' + page)
       if (this.listQuery.sEcho !== page) {
         this.listQuery.sEcho = page
         this.listQuery.start = page * 10 - 10
@@ -315,7 +313,6 @@ export default {
       this.fetchData()
     },
     handleDialog: function(params) {
-      const _this = this
       this.dialogStatus = '新增账户'
       this.temp.customerType = '2'
       this.temp.sex = '0'

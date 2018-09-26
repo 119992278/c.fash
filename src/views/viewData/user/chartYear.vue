@@ -43,7 +43,6 @@ export default {
       const _this = this
       getCountRegUser(this.listQuery).then(response => {
         const _tempYdata = []
-        const index = 1
         response.rows.map(function(value, key, arr) {
           _tempYdata[parseInt(value.unitFormat) - 1] = parseInt(value.number)
         })

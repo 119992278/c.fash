@@ -56,7 +56,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       filename: 'index.html',
       template: 'index.html',
       inject: true,
-      favicon: resolve('favicon.ico'),
+      favicon: resolve('bitbug_favicon.ico'),
       title: 'c.fashioncomm.com'
     })
   ]

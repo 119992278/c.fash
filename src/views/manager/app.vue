@@ -4,7 +4,7 @@
     <el-input v-model="searchVal" style="width: 200px;" class="filter-item" placeholder="请输入需要查询" @keyup.native.enter="search"/>
     <el-button class="filter-item" type="primary" icon="el-icon-search" @click="search()">search</el-button>
     <el-dialog :title="dialogStatus" :visible.sync="dialogUrlVisible" center modal show-close top="3vh" width="40%">
-      <el-form ref="dataUrlForm" :model="temp" :rules="rules">
+      <el-form ref="dataUrlForm" :model="versionTemp" :rules="rules">
         <el-form-item :label-width="formLabelWidth" label="App名称:" prop="appName">
           <el-input v-model="versionTemp.appName" disabled/>
         </el-form-item>
@@ -28,7 +28,7 @@
       </el-form>
       <div class="dialog-footer" align="right">
         <el-button @click="dialogUrlVisible = false">取消</el-button>
-        <el-button type="primary" @click="updateData">更新</el-button>
+        <el-button type="primary" @click="handleData">更新</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" center modal show-close top="3vh" width="80%">
@@ -53,14 +53,14 @@
         <el-form-item :label-width="formLabelWidth" label="APP说明:" prop="aboutUsChinese">
           <el-input v-model="temp.aboutUsChinese"/>
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="经销商:" prop="customerName">
+        <el-form-item :label-width="formLabelWidth" label="经销商:">
           <el-select v-model="temp.customerId" filterable placeholder="请选择" @change="setcustomerCode">
-            <el-option v-for="item in customerList" :key="item.value" :label="item.name" :value="item.value" />
+            <el-option v-for="item in customerList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="支持设备:">
           <el-checkbox-group v-model="productId" size="small">
-            <el-checkbox v-for="(item,index) in productList" :label="item.value" :key="index" border>{{ item.name }}</el-checkbox>
+            <el-checkbox v-for="(item,index) in productList" :label="item.value" :key="index" border>{{ item.label }}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="支持表盘:">
@@ -237,7 +237,7 @@ export default {
       } else {
         getProductList({ limit: 1000, start: 0 }).then(response => {
           response.rows.map(function(value1, index, arr) {
-            _this.productList.push({ value: String(value1.productId), name: value1.productName })
+            _this.productList.push({ value: String(value1.productId), label: value1.productName })
           })
         })
         getWatchFaceList(this.temp).then(response => {
@@ -245,7 +245,7 @@ export default {
         })
         getListCustomer(this.temp).then(response => {
           response.rows.map(function(value1, index, arr) {
-            _this.customerList.push({ value: String(value1.customerId), code: value1.customerCode, name: value1.customerName })
+            _this.customerList.push({ value: String(value1.customerId), code: value1.customerCode, label: value1.customerName })
           })
         })
       }
@@ -303,17 +303,25 @@ export default {
       if (id) {
         getVersionById(id).then(response => {
           this.versionTemp = Object.assign({}, response.data)
+          this.versionTemp.appName = row.appChineseName
         })
       } else {
         this.versionTemp.appId = row.appId
         this.versionTemp.clientType = style
+        this.versionTemp.appName = row.appChineseName
       }
-      this.versionTemp.appName = row.appChineseName
       this.dialogUrlVisible = true
     },
     handleData() {
-      addAppVersion(this.temp).then(response => {
-        this.dialogUrlVisible = true
+      addAppVersion(this.versionTemp).then(response => {
+        Message({
+          title: '成功',
+          message: '更新成功',
+          type: 'success',
+          duration: 2 * 1000
+        })
+        this.dialogUrlVisible = false
+        this.fetchData()
       })
     },
     search(name) {
@@ -336,7 +344,7 @@ export default {
       const _this = this
       this.dialogStatus = '新增' + this.tempName
       this.dialogFormVisible = true
-      this.temp.customerId = '0'
+      // this.temp.customerId = '0'
     },
     handleUpdate: function(row) {
       this.dialogStatus = '编辑' + this.tempName
@@ -392,7 +400,6 @@ export default {
       var reader = new FileReader()
       reader.readAsDataURL(file.raw)
       reader.onload = function(e) {
-        console.log(JSON.stringify(reader))
         _this.temp.imageUrl = this.result
       }
     }

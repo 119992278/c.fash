@@ -18,7 +18,7 @@
       click-mode="push"
     />
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <h3 class="title">乐源云管理系统(demo)</h3>
+      <h3 class="title">乐源云管理系统(内测版)</h3>
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { isvalidUsername, isvalidNoEmpty } from '@/utils/validate'
+import { isNoEmpty, isvalidNoEmpty } from '@/utils/validate'
 import store from '@/store'
 import { getToken, getCookie } from '@/utils/auth'
 
@@ -64,7 +64,7 @@ export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
+      if (!isNoEmpty(value)) {
         callback(new Error('请输入正确的用户名'))
       } else {
         callback()

@@ -37,6 +37,12 @@ export default {
         return []
       }
     },
+    chartLoad: {
+      type: Boolean,
+      default: function() {
+        return true
+      }
+    },
     title: {
       type: String,
       default: '标题'
@@ -49,15 +55,26 @@ export default {
     }},
   data() {
     return {
+      throwXdata: [],
       chart: null
     }
   },
   watch: {
+    chartLoad: function(val) {
+      if (val) {
+        this.showLoading()
+      } else {
+        this.chart.hideLoading()
+      }
+    },
     ydata: function(val) {
       this.setOption()
     },
     xdata: function(val) {
-      this.setOption()
+      if (this.throwXdata.length === 0) {
+        this.setOption()
+        this.throwXdata = val
+      }
     }
   },
   mounted() {
@@ -114,36 +131,10 @@ export default {
             color: '#fff'
           }
         },
-        legend: {
-          x: '5%',
-          top: '10%',
-          textStyle: {
-            color: '#90979c'
-          }
-          // data: ['female', 'male', 'average']
-        },
         calculable: true,
         xAxis: [{
           type: 'category',
-          axisLine: {
-            lineStyle: {
-              color: '#90979c'
-            }
-          },
-          splitLine: {
-            show: false
-          },
-          axisTick: {
-            show: false
-          },
-          splitArea: {
-            show: false
-          },
-          axisLabel: {
-            interval: 0
-
-          },
-          data: xData
+          data: this.xdata
         }],
         yAxis: [{
           type: 'value',
@@ -192,7 +183,7 @@ export default {
           end: 35
         }],
         series: [{
-          name: 'female',
+          name: this.title,
           type: 'bar',
           stack: 'total',
           barMaxWidth: 35,
@@ -212,7 +203,7 @@ export default {
               }
             }
           },
-          data: [709, 1917, 2455, 2610, 1719, 1433, 1544, 3285, 5208, 3372, 2484, 4078]
+          data: this.ydata
         },
 
         {
@@ -232,7 +223,7 @@ export default {
               }
             }
           },
-          data: [327, 1776, 507, 1200, 800, 482, 204, 1390, 1001, 951, 381, 220]
+          data: this.ydata
         }
         ]
       })

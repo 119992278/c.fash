@@ -364,6 +364,24 @@ export function getSportList(params) {
   })
 }
 
+// 获取用户权限
+export function getUserRoleList(params) {
+  return request({
+    url: '/dealer/user/role',
+    method: 'post',
+    data: params
+  })
+}
+
+// 重置用户密码
+export function getAccountForResetList(params) {
+  return request({
+    url: '/dealer/user/accountForReset',
+    method: 'post',
+    data: params
+  })
+}
+
 // 添加操作历史
 export function addHistory(operate, result) {
   if (result.code === 0) {

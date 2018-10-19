@@ -99,7 +99,7 @@ export const asyncRouterMap = [
       {
         path: 'chart',
         name: '用户图表',
-        component: () => import('@/views/manager/chartUser'),
+        component: () => import('@/views/manager/userChart'),
         meta: { title: 'userChart', icon: '', roles: ['5'] }
       },
       {
@@ -128,7 +128,7 @@ export const asyncRouterMap = [
     redirect: '/datas/user/chartDay',
     name: '查看数据',
     alwaysShow: true,
-    meta: { title: 'data', icon: 'table', roles: ['8', '9', '10', '11', '12', '22'] },
+    meta: { title: 'data', icon: 'table', roles: ['8', '9', '10', '11', '12', '22', '24'] },
     children: [
       {
         path: 'ctivityUser',
@@ -203,10 +203,16 @@ export const asyncRouterMap = [
         meta: { title: 'sportDataAnalysis', icon: '', roles: ['12'] }
       },
       {
-        path: 'list6',
-        component: () => import('@/views/errorPage/404'),
+        path: 'resetPwd',
+        component: () => import('@/views/viewData/resetPwd'),
         name: '重置用户密码',
         meta: { title: 'resetPwd', icon: '', roles: ['22'] }
+      },
+      {
+        path: 'userRight',
+        component: () => import('@/views/viewData/userRight'),
+        name: '用户权限',
+        meta: { title: 'userRight', icon: '', roles: ['24'] }
       }
     ]
   },
@@ -263,13 +269,13 @@ export const asyncRouterMap = [
         component: () => import('@/views/manager/question'),
         name: '常见问题设置',
         meta: { title: 'commonQuestionSetting', icon: '', roles: ['18'] }
-      },
-      {
-        path: 'weixin',
-        component: () => import('@/views/setting/weixin'),
-        name: '微信运动授权',
-        meta: { title: '微信运动授权', icon: '', roles: ['18'] }
       }
+      // {
+      //   path: 'weixin',
+      //   component: () => import('@/views/setting/weixin'),
+      //   name: '微信运动授权',
+      //   meta: { title: '微信运动授权', icon: '', roles: ['18'] }
+      // }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

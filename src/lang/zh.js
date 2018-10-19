@@ -25,6 +25,7 @@ export default {
     userYearAnalysis: '每年活跃数',
     sportDataAnalysis: '运动数据分析',
     resetPwd: '重置用户密码',
+    userRight: '用户权限',
     EmailPromotion: '邮件推广',
     shortMessagePromotion: '短信及邮件推广',
     appMessagePush: 'APP消息推送',
@@ -323,7 +324,9 @@ export default {
     watchFaceName: '表盘名称',
     watchFaceId: '表盘编号',
     watchFaceUrl: '表盘图片',
-    inputFaceNameQuery: '输入表盘名称查询'
+    inputFaceNameQuery: '输入表盘名称查询',
+    //
+    userRole: '用户支持的权限'
   },
   login: {
     leyuan: '乐源云管理系统(内测版)',

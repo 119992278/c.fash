@@ -43,6 +43,7 @@
           <el-tag>用户密码: $userPassword</el-tag>
           <el-tag>验证码: $random</el-tag>
           <el-tag>邮箱: $userMail</el-tag>
+          <el-tag>数据下载链接: $downloadUrl</el-tag>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" :label="$t('table.model')">
           <el-radio-group v-model="temp.isNew">
@@ -263,8 +264,16 @@ export default {
       this.fetchData()
     },
     handleAdd: function(params) {
+      const _this = this
       this.dialogStatus = '新增' + this.tempName
       this.dialogFormVisible = true
+      getAPPList({ limit: 1000, start: 0 }).then(response => {
+        response.rows.map(function(value1, index, arr) {
+          _this.appList.push({ value: String(value1.appId), label: value1.appChineseName })
+        })
+        this.temp.appName = this.appList[0].label
+        this.temp.appId = this.appList[0].value
+      })
     },
     handleUpdate: function(row) {
       const _this = this

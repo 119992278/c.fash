@@ -15,19 +15,44 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('login.username')" min-width="120" align="left" show-overflow-tooltip>
+      <el-table-column :label="$t('login.username')" min-width="130" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.accountId }}</span>
+          {{ scope.row.accountId }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.appName')" min-width="120" align="left" show-overflow-tooltip>
+      <el-table-column :label="$t('table.name')" min-width="110" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.appName }}</span>
+          <span>{{ scope.row.userName }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.userRole')" min-width="260" align="left" show-overflow-tooltip>
+      <el-table-column :label="$t('table.nickName')" min-width="130" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.roleName }}</span>
+          {{ scope.row.nickname }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.gender')" width="110" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.sex | sexStamp }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.height')" width="110" align="center">
+        <template slot-scope="scope">
+          {{ scope.row| heightStamp }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.weight')" min-width="160" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row | wegightStamp }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.birthday')" min-width="160" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.birthday }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.latelyLogin')" min-width="160" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.loginTime | momentStamp }}
         </template>
       </el-table-column>
     </el-table>
@@ -40,7 +65,7 @@ import i18n from '@/lang'
 import { momentStampFormat, cleanCustomerId } from '@/utils/index'
 import { getToken, getCookie } from '@/utils/auth'
 import { Message, MessageBox } from 'element-ui'
-import { getUserRole } from '@/api/dealer'
+import { getAccountForResetList } from '@/api/dealer'
 import { isvalidNoEmpty } from '@/utils/validate'
 export default {
   filters: {
@@ -83,7 +108,7 @@ export default {
     },
     fetchData() {
       this.listLoading = true
-      getUserRole(this.listQuery).then(response => {
+      getAccountForResetList(this.listQuery).then(response => {
         this.listLoading = false
         this.list = response.rows
         this.totalQuantity = response.total

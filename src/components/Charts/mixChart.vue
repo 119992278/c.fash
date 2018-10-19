@@ -121,7 +121,21 @@ export default {
           name: this.title,
           type: 'bar',
           data: this.ydata,
-          color: '#00BFB7'
+          itemStyle: {
+            normal: {
+              color: '#00BFB7',
+              label: {
+                show: true,
+                textStyle: {
+                  color: '#fff'
+                },
+                position: 'insideTop',
+                formatter(p) {
+                  return p.value > 0 ? p.value : ''
+                }
+              }
+            }
+          }
         }]
       })
     }

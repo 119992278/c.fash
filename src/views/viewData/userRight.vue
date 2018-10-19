@@ -40,7 +40,7 @@ import i18n from '@/lang'
 import { momentStampFormat, cleanCustomerId } from '@/utils/index'
 import { getToken, getCookie } from '@/utils/auth'
 import { Message, MessageBox } from 'element-ui'
-import { getUserRole } from '@/api/dealer'
+import { getUserRoleList } from '@/api/dealer'
 import { isvalidNoEmpty } from '@/utils/validate'
 export default {
   filters: {
@@ -83,7 +83,7 @@ export default {
     },
     fetchData() {
       this.listLoading = true
-      getUserRole(this.listQuery).then(response => {
+      getUserRoleList(this.listQuery).then(response => {
         this.listLoading = false
         this.list = response.rows
         this.totalQuantity = response.total

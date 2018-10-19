@@ -25,6 +25,7 @@ export default {
     userYearAnalysis: 'Year Analysis',
     sportDataAnalysis: 'Sport Data Analyze',
     resetPwd: "Reset User's Password",
+    userRight: 'User Right',
     EmailPromotion: 'Email Promotion',
     shortMessagePromotion: 'SMS And Email',
     appMessagePush: 'APP Promotion',
@@ -323,7 +324,9 @@ export default {
     watchFaceName: 'watch Face Name',
     watchFaceId: 'watch Face Id',
     watchFaceUrl: 'watch Face Icon',
-    inputFaceNameQuery: 'Input The Name To Query'
+    inputFaceNameQuery: 'Input The Name To Query',
+    //
+    userRole: 'User Role'
   },
   login: {
     leyuan: 'Management System',

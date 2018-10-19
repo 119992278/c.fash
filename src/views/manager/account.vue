@@ -168,8 +168,8 @@
       </el-table-column>
       <el-table-column :label="$t('table.operation')" min-width="180" align="center">
         <template slot-scope="scope">
-          <el-button :disabled="!$store.state.user.authority.authority1.includes(String(scope.row.customerId))" icon="el-icon-edit" size="small" type="success" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
-          <el-button v-if="getCookie('customerId') === 0" size="small" type="primary" @click="handleAuthority(scope.row)">{{ $t('table.authority') }}</el-button>
+          <el-button :disabled="!user.authority1.includes(String(scope.row.customerId))" icon="el-icon-edit" size="small" type="success" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
+          <el-button v-if="contactUser === 'admin'" size="small" type="primary" @click="handleAuthority(scope.row)">{{ $t('table.authority') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -208,6 +208,7 @@ export default {
       totalQuantity: 0,
       dialogFormAuthority: false,
       dialogFormVisible: false,
+      contactUser: getCookie('contactUser'),
       dialogStatus: i18n.t('table.newAddAccount'),
       authorityName: '',
       authority1: [],
@@ -218,6 +219,9 @@ export default {
       productList: [],
       tempCustomerAccountId: '',
       authoList: [],
+      user: {
+        authority1: this.$store.state.user.authority.authority1
+      },
       temp: {
         addType: '1',
         auditStatus: 0,
